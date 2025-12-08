@@ -12,7 +12,8 @@ An interactive web-based visualizer that creates mesmerizing spiral patterns wit
 
 - **Layered Spirals**: Stack up to 100 layers with adjustable scaling (shrink or grow).
 - **Colored Mirroring**: Vertical, horizontal, or both, with distinct colors for each.
-- **Dynamic Effects**: Auto-rotate, curved lines, gradients, and dashes for visual flair.
+- **Dynamic Effects**: Auto-rotate, gradients, dashes, and multiple line end styles (boxed, tapered, rounded).
+- **High-Performance Engine**: Powered by WebGL for smooth rendering of complex, multi-layered designs.
 - **Presets**: 12 unique designs, optimized for cosmic and artistic impact.
 - **Responsive**: Works on desktop and mobile with touch controls.
 - **Export**: Download high-res PNGs (2160x2160).
@@ -67,9 +68,9 @@ To run this project locally:
 ## How It Works
 
 - The spiral is drawn on an HTML5 canvas using JavaScript, updating instantly with user inputs.
+- **WebGL Rendering**: The visualization is rendered using WebGL and shaders, leveraging the GPU for high performance. This allows for more layers, nodes, and effects while maintaining a smooth framerate.
 - Mirror effects reflect the spiral path across vertical and/or horizontal axes with customizable colors.
 - Logarithmic spirals use an exponential growth factor, while linear spirals increase radius proportionally.
-- Performance is optimized for up to 50 nodes and 100 layers, with options to disable gradient strokes for lighter rendering.
 
 ## Presets
 
@@ -102,4 +103,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
-Created by [jasonbra1n](https://github.com/jasonbra1n) | March 2025
+Created by [jasonbra1n](https://github.com/jasonbra1n) | December 2025
