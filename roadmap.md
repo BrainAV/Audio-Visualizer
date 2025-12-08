@@ -7,7 +7,7 @@ This document outlines the development roadmap for the Audio Visualizer project.
 The immediate goals are to refine the existing features, improve performance, and enhance the core audio-reactive experience.
 
 - **[ ] Code Refactoring:**
-  - [ ] Modularize `script.js` into smaller, focused files (e.g., `ui.js`, `drawing.js`, `audio.js`, `state.js`).
+  - [x] Modularize `script.js` into smaller, focused files (e.g., `ui.js`, `drawing.js`, `audio.js`, `state.js`).
   - [x] Optimize the animation loop to avoid unnecessary DOM reads on every frame and use `lerp` for smooth transitions. *(Discovered in `/2` prototype)*.
   - [ ] Convert `styles.css` to use CSS variables for easier theming.
 
@@ -21,20 +21,24 @@ The immediate goals are to refine the existing features, improve performance, an
   - [ ] Add more parameters for audio reactivity (e.g., line width, number of nodes, layer ratio).
   - [ ] Create new presets specifically designed for audio visualization.
 
+- **[ ] User Documentation:**
+  - [ ] Create a user-friendly "How to Use" guide accessible from the main UI.
+  - [ ] Add an "About" page detailing the project's purpose, features, and technology.
+
 ## Version 2.0 (Enhanced Reactivity)
 
 This version will focus on integrating more advanced audio analysis techniques, likely based on the prototypes in the `/2` and `/3` folders.
 
 - **[x] Advanced Rendering:**
   - [x] Explore and implement WebGL for significantly improved performance. *(Discovered in `/3` prototype)*.
-  - [ ] Re-implement `curvedLines` functionality in the new WebGL engine.
+  - [x] Re-implement `curvedLines` functionality in the new WebGL engine.
 
 - **[ ] Advanced Audio Analysis:**
   - [ ] Implement FFT (Fast Fourier Transform) to analyze audio frequency data, not just amplitude.
   - [ ] Allow different visual parameters to react to different frequency ranges (e.g., bass frequencies affect scale, treble affects color or rotation speed).
 
 - **[ ] New Visual Modes:**
-  - [ ] Introduce new visualizer types beyond spirals (e.g., bar graphs, waveforms, particle systems) leveraging the WebGL engine.
+  - [ ] Introduce new visualizer types beyond spirals (e.g., frequency bars, circular waveforms, particle systems, tunnel effects) leveraging the WebGL engine.
   - [ ] Allow color to be reactive to audio frequency or amplitude.
 
 - **[ ] Input Sources:**

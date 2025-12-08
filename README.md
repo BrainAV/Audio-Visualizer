@@ -12,9 +12,10 @@ An interactive web-based visualizer that creates mesmerizing spiral patterns wit
 
 - **Layered Spirals**: Stack up to 100 layers with adjustable scaling (shrink or grow).
 - **Colored Mirroring**: Vertical, horizontal, or both, with distinct colors for each.
+- **Audio-Reactive**: Watch the visualizer react to your microphone input, with options for scale, rotation, and opacity to respond to sound.
 - **Dynamic Effects**: Auto-rotate, gradients, dashes, and multiple line end styles (boxed, tapered, rounded).
 - **High-Performance Engine**: Powered by WebGL for smooth rendering of complex, multi-layered designs.
-- **Presets**: 12 unique designs, optimized for cosmic and artistic impact.
+- **Presets**: 16 unique designs, optimized for cosmic and artistic impact.
 - **Responsive**: Works on desktop and mobile with touch controls.
 - **Export**: Download high-res PNGs (2160x2160).
 
@@ -62,8 +63,14 @@ To run this project locally:
 ## Files
 
 - `index.html`: The main HTML structure with controls and canvas.
-- `script.js`: JavaScript logic for drawing spirals, handling inputs, and exporting images.
 - `styles.css`: CSS for responsive layout and styling.
+- `script.js`: The main script that initializes the application and coordinates the other modules.
+- `webgl-setup.js`: Handles low-level WebGL shader and program setup.
+- `drawing.js`: Contains the core logic for calculating and rendering the spiral visuals.
+- `audio.js`: Manages microphone input and audio-reactive animations.
+- `ui.js`: Controls all user interface interactions and event listeners.
+- `state.js`: Manages application state, including undo/reset functionality.
+- `presets.js`: Stores all preset configurations.
 
 ## How It Works
 
@@ -86,6 +93,10 @@ To run this project locally:
 - **Crystal Vortex**: A sharp, logarithmic spiral with 40 nodes, 40 layers, and vertical mirroring (ratio 4.9).
 - **Galactic Pulse**: A bold, auto-rotating spiral with 50 nodes, 60 layers, and horizontal mirroring (ratio 5.1).
 - **Ethereal Rings**: A soft, dashed spiral with 30 nodes, 80 layers, and full mirroring (ratio 4.6).
+- **Violet Bloom**: A thick, mirrored spiral with 50 nodes and a vibrant violet color scheme.
+- **Twilight Petals**: A mirrored, logarithmic spiral with purple and blue tones, resembling petals at dusk.
+- **Solar Flare Blossom**: A very thick, low-opacity, dashed spiral with fiery yellow and orange colors.
+- **Midnight Bloom**: A dark, logarithmic, and dashed spiral with deep blue and purple tones.
 
 ## Contributing
 
