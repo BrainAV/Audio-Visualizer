@@ -1,10 +1,11 @@
-let audioContext, analyser, dataArray;
+let audioContext, analyser, dataArray, mediaStream;
 
 async function initAudio() {
+  if (audioContext) return; // Already initialized
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioContext.createMediaStreamSource(stream);
+    const source = audioContext.createMediaStreamSource(mediaStream);
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 64;
     analyser.smoothingTimeConstant = 0.3;
@@ -14,6 +15,20 @@ async function initAudio() {
   } catch (err) {
     console.error('Error accessing microphone:', err);
     alert('Couldn’t access microphone. Please allow mic permissions.');
+  }
+}
+
+function stopAudio() {
+  if (mediaStream) {
+    mediaStream.getTracks().forEach(track => track.stop());
+    mediaStream = null;
+  }
+  if (audioContext) {
+    audioContext.close().then(() => {
+      audioContext = null;
+      analyser = null;
+      console.log('Audio stopped and context closed.');
+    });
   }
 }
 

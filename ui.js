@@ -67,21 +67,36 @@ function initUI() {
   // -------------------------------
   // Audio Reactive Setup
   // -------------------------------
+  const audioToggleButton = document.getElementById('audioToggleButton');
+
   document.getElementById('audioReactive').addEventListener('change', function() {
     currentParams.audioReactive = this.checked;
     document.getElementById('audioOptions').style.display = this.checked ? 'block' : 'none';
-    if (this.checked && !audioContext) {
-      baseScale = parseFloat(document.getElementById('scale').value);
-      initAudio().then(() => {
-        animateAudioReactive();
-      });
-    } else if (this.checked) {
-      baseScale = parseFloat(document.getElementById('scale').value);
+    audioToggleButton.style.display = this.checked ? 'inline-block' : 'none';
+
+    if (this.checked && audioContext) {
       animateAudioReactive();
     } else {
-      document.getElementById('scale').value = baseScale;
-      document.getElementById('scaleValue').textContent = baseScale.toFixed(1);
       drawSpiral();
+    }
+  });
+
+  audioToggleButton.addEventListener('click', function() {
+    if (!audioContext) {
+      // Start Audio
+      baseScale = parseFloat(document.getElementById('scale').value);
+      initAudio().then(() => {
+        if (audioContext) {
+          this.textContent = 'Stop Audio';
+          if (document.getElementById('audioReactive').checked) {
+            animateAudioReactive();
+          }
+        }
+      });
+    } else {
+      // Stop Audio
+      stopAudio();
+      this.textContent = 'Start Audio';
     }
   });
 

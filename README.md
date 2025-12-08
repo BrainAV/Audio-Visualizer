@@ -2,7 +2,7 @@ https://jasonbra1n.github.io/Audio-Visualizer/
 
 # Audio Visualizer
 
-Create stunning, customizable spiral visualizations with vibrant colored mirrors, multi-layered designs, and dynamic cosmic effects. This web-based tool lets you tweak scale, nodes, layers, and ratios, with options for logarithmic or linear growth, gradient strokes, dashed lines, and auto-rotation. Explore 12 presets—from the ethereal **Nebula** to the rippling **Cosmic Wave**—or craft your own visual masterpiece.
+Create stunning, customizable spiral visualizations with vibrant colored mirrors, multi-layered designs, and dynamic cosmic effects. This web-based tool lets you tweak scale, nodes, layers, and ratios, with options for logarithmic or linear growth, gradient strokes, dashed lines, and auto-rotation. Explore 16 presets—from the ethereal **Nebula** to the rippling **Cosmic Wave**—or craft your own visual masterpiece.
 
 An interactive web-based visualizer that creates mesmerizing spiral patterns with customizable parameters and mirror effects. Built with HTML, CSS, and JavaScript, this project allows users to experiment with spirals, layers, mirroring, and colors, and download high-resolution images of their creations.
 

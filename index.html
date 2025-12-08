@@ -26,7 +26,7 @@
     <div class="controls">
       <div class="control-group">
         <h3>Presets</h3>
-        <label>Load Preset: 
+        <label data-tooltip="Load a pre-configured visual design.">Load Preset: 
           <select id="presetSelector">
             <option value="">Select a Preset</option>
             <option value="custom">Custom</option>
@@ -34,48 +34,49 @@
           </select>
         </label>
         <div>
-          <button onclick="undo()">Undo</button>
-          <button onclick="reset()">Reset</button>
+          <button onclick="undo()" data-tooltip="Undo the last parameter change.">Undo</button>
+          <button onclick="reset()" data-tooltip="Reset all parameters to their default values.">Reset</button>
         </div>
       </div>
 
       <div class="control-group">
         <h3>Master Settings</h3>
-        <label>Auto-Rotate: <input type="checkbox" id="autoRotate"></label>
-        <label>Audio Reactive: <input type="checkbox" id="audioReactive"></label>
+        <label data-tooltip="Automatically rotates the spiral."><input type="checkbox" id="autoRotate"> Auto-Rotate</label>
+        <label data-tooltip="Makes the visualizer react to microphone input."><input type="checkbox" id="audioReactive"> Audio Reactive</label>
+        <button id="audioToggleButton" style="display: none; margin-top: 5px;">Start Audio</button>
         <div id="audioOptions" style="display: none; margin-left: 20px;">
-          <label><input type="checkbox" id="audioRotate"> Rotate</label>
-          <label><input type="checkbox" id="audioScale"> Scale</label>
-          <label><input type="checkbox" id="audioOpacity"> Opacity</label>
-          <label>Scale Gap: <input type="range" id="scaleGap" min="1" max="50" value="10"> <span id="scaleGapValue">10</span></label>
-          <label>Scale Sensitivity: <input type="range" id="scaleSensitivity" min="0.5" max="5" step="0.1" value="1"> <span id="scaleSensitivityValue">1</span></label>
+          <label data-tooltip="Makes rotation reactive to audio."><input type="checkbox" id="audioRotate"> Rotate</label>
+          <label data-tooltip="Makes scale reactive to audio."><input type="checkbox" id="audioScale"> Scale</label>
+          <label data-tooltip="Makes opacity reactive to audio."><input type="checkbox" id="audioOpacity"> Opacity</label>
+          <label data-tooltip="Maximum amount the scale can increase with audio.">Scale Gap: <input type="range" id="scaleGap" min="1" max="50" value="10"> <span id="scaleGapValue">10</span></label>
+          <label data-tooltip="How strongly the scale reacts to audio.">Scale Sensitivity: <input type="range" id="scaleSensitivity" min="0.5" max="5" step="0.1" value="1"> <span id="scaleSensitivityValue">1</span></label>
         </div>
       </div>
 
       <div class="control-group">
         <h3>Core Parameters</h3>
-        <label>Scale: <input type="range" id="scale" min="1" max="100" step="0.1" value="30"> <span id="scaleValue">30</span></label>
-        <label>Nodes: <input type="range" id="nodes" min="5" max="50" value="12"> <span id="nodesValue">12</span></label>
-        <label>Rotation: <input type="range" id="rotation" min="0" max="360" value="0"> <span id="rotationValue">0</span></label>
+        <label data-tooltip="Controls the overall size of the spiral.">Scale: <input type="range" id="scale" min="1" max="100" step="0.1" value="30"> <span id="scaleValue">30</span></label>
+        <label data-tooltip="Number of points in each spiral arm.">Nodes: <input type="range" id="nodes" min="5" max="50" value="12"> <span id="nodesValue">12</span></label>
+        <label data-tooltip="Sets the starting angle of the spiral.">Rotation: <input type="range" id="rotation" min="0" max="360" value="0"> <span id="rotationValue">0</span></label>
       </div>
 
       <div class="control-group">
         <h3>Layer Controls</h3>
-        <label>Layers: <input type="range" id="layers" min="1" max="100" value="3"> <span id="layersValue">3</span></label>
-        <label>Layer Ratio: 
+        <label data-tooltip="Number of concentric spiral layers.">Layers: <input type="range" id="layers" min="1" max="100" value="3"> <span id="layersValue">3</span></label>
+        <label data-tooltip="Spacing between layers. >1 grows, <1 shrinks.">Layer Ratio: 
           <input type="range" id="layerRatio" min="0.1" max="10" step="0.1" value="2">
           <span id="layerRatioValue">2</span>
         </label>
         <div>
-          <button onclick="setRatio(1.618)">Golden Ratio</button>
-          <button onclick="setRatio(2.414)">Silver Ratio</button>
+          <button onclick="setRatio(1.618)" data-tooltip="Set layer ratio to the Golden Ratio (φ ≈ 1.618).">Golden Ratio</button>
+          <button onclick="setRatio(2.414)" data-tooltip="Set layer ratio to the Silver Ratio (δS ≈ 2.414).">Silver Ratio</button>
         </div>
       </div>
 
       <div class="control-group">
         <h3>Mirror Effects</h3>
-        <label><input type="checkbox" id="verticalMirror"> Vertical Mirror</label>
-        <label><input type="checkbox" id="horizontalMirror"> Horizontal Mirror</label>
+        <label data-tooltip="Mirrors the spiral across the vertical axis."><input type="checkbox" id="verticalMirror"> Vertical Mirror</label>
+        <label data-tooltip="Mirrors the spiral across the horizontal axis."><input type="checkbox" id="horizontalMirror"> Horizontal Mirror</label>
         <div class="mirror-colors">
           <label>Vertical Color: <input type="color" id="verticalColor" value="#FF00FF"></label>
           <label>Horizontal Color: <input type="color" id="horizontalColor" value="#FFFF00"></label>
@@ -85,32 +86,32 @@
 
       <div class="control-group">
         <h3>Style Options</h3>
-        <label>Color: <input type="color" id="strokeColor" value="#00FFFF"></label>
-        <label>Line Width: <input type="range" id="lineWidth" min="1" max="10" value="2"> <span id="lineWidthValue">2</span></label>
-        <label>Opacity: <input type="range" id="opacity" min="0" max="1" step="0.1" value="1"> <span id="opacityValue">1</span></label>
-        <label>Spiral Type: 
+        <label data-tooltip="The main color of the primary spiral.">Color: <input type="color" id="strokeColor" value="#00FFFF"></label>
+        <label data-tooltip="The thickness of the spiral lines.">Line Width: <input type="range" id="lineWidth" min="1" max="10" value="2"> <span id="lineWidthValue">2</span></label>
+        <label data-tooltip="The transparency of the spiral.">Opacity: <input type="range" id="opacity" min="0" max="1" step="0.1" value="1"> <span id="opacityValue">1</span></label>
+        <label data-tooltip="Linear for even spacing, Logarithmic for exponential spacing.">Spiral Type: 
           <select id="spiralType">
             <option value="linear">Linear</option>
             <option value="logarithmic">Logarithmic</option>
           </select>
         </label>
-        <label>Line End Style: 
+        <label data-tooltip="Style of the line endings (for thick lines).">Line End Style: 
           <select id="lineEndStyle">
             <option value="boxed">Boxed</option>
             <option value="tapered">Tapered</option>
             <option value="rounded">Rounded</option>
           </select>
         </label>
-        <label>Background Color: <input type="color" id="backgroundColor" value="#111111"></label>
-        <label><input type="checkbox" id="gradientStroke" checked> Gradient Stroke</label>
-        <label><input type="checkbox" id="dashEffect"> Dashed Lines</label>
-        <label><input type="checkbox" id="curvedLines"> Curved Lines</label>
+        <label data-tooltip="The background color of the canvas.">Background Color: <input type="color" id="backgroundColor" value="#111111"></label>
+        <label data-tooltip="Fades the line color to black along its length."><input type="checkbox" id="gradientStroke" checked> Gradient Stroke</label>
+        <label data-tooltip="Renders the lines with a dashed pattern."><input type="checkbox" id="dashEffect"> Dashed Lines</label>
+        <label data-tooltip="Draws smooth curves instead of straight lines between nodes."><input type="checkbox" id="curvedLines"> Curved Lines</label>
       </div>
     </div>
 
     <div class="download-container">
-      <button onclick="downloadCanvas()">Download Image (2160×2160)</button>
-      <button id="fullscreenButton">Go Fullscreen</button>
+      <button onclick="downloadCanvas()" data-tooltip="Saves the current visual as a high-resolution PNG file.">Download Image (2160×2160)</button>
+      <button id="fullscreenButton" data-tooltip="View the visualizer in full screen mode.">Go Fullscreen</button>
     </div>
   </div>
 

@@ -6,16 +6,16 @@ This document outlines the development roadmap for the Audio Visualizer project.
 
 The immediate goals are to refine the existing features, improve performance, and enhance the core audio-reactive experience.
 
-- **[ ] Code Refactoring:**
+- **[x] Code Refactoring:**
   - [x] Modularize `script.js` into smaller, focused files (e.g., `ui.js`, `drawing.js`, `audio.js`, `state.js`).
   - [x] Optimize the animation loop to avoid unnecessary DOM reads on every frame and use `lerp` for smooth transitions. *(Discovered in `/2` prototype)*.
-  - [ ] Convert `styles.css` to use CSS variables for easier theming.
+  - [x] Convert `styles.css` to use CSS variables for easier theming.
 
 - **[ ] UI/UX Enhancements:**
-  - [ ] Add a "Start/Stop Audio" button to give users more explicit control over microphone access.
+  - [x] Add a "Start/Stop Audio" button to give users more explicit control over microphone access.
   - [ ] Improve layout and responsiveness of the controls panel for smaller screens.
   - [x] Integrate advanced mobile touch controls (pinch-to-zoom, drag-to-rotate) from the `/2` prototype.
-  - [ ] Add tooltips to explain what each control does.
+  - [x] Add tooltips to explain what each control does.
 
 - **[ ] Core Feature Improvements:**
   - [ ] Add more parameters for audio reactivity (e.g., line width, number of nodes, layer ratio).
