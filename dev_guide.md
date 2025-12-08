@@ -45,6 +45,14 @@ The drawing logic is now based on WebGL shaders defined at the top of `script.js
 
 To change the fundamental appearance of the lines, you will need to modify the GLSL code in the fragment shader. To change the shape of the spiral, you will modify the vertex generation loop inside `drawSpiralPath`.
 
+### Maintaining Project Documentation
+
+To keep the project organized and track its progress, it's important to maintain the following files:
+
+- **`changelog.md`**: When you add a feature, fix a bug, or make any notable change, add a line item to the `[Unreleased]` section of the changelog. This helps everyone see what's new in upcoming releases.
+
+- **`roadmap.md`**: This file tracks planned features. If you start working on a planned feature, please update its status (e.g., mark the checkbox `[x]`). If you have ideas for major new features, add them to the appropriate section of the roadmap for discussion.
+
 ### Coding Style
 
 - Use Prettier for consistent code formatting (or follow the existing style).

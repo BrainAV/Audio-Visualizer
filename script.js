@@ -817,5 +817,4 @@ function showFullscreenOverlay() {
 }
 
 // Initial draw
-populatePresetSelector();
 drawSpiral();
