@@ -1,10 +1,12 @@
-# Kathara Spiral Generator
+https://jasonbra1n.github.io/Audio-Visualizer/
 
-Create stunning, customizable spirals with vibrant colored mirrors, multi-layered designs, and dynamic cosmic effects. This web-based tool lets you tweak scale, nodes, layers, and ratios, with options for logarithmic or linear growth, gradient strokes, dashed lines, and auto-rotation. Explore 12 presets—from the ethereal **Nebula** to the rippling **Cosmic Wave**—or craft your own spiral masterpiece.
+# Audio Visualizer
 
-An interactive web-based spiral generator that creates mesmerizing Kathara-inspired spiral patterns with customizable parameters and mirror effects. Built with HTML, CSS, and JavaScript, this project allows users to experiment with spirals, layers, mirroring, and colors, and download high-resolution images of their creations.
+Create stunning, customizable spiral visualizations with vibrant colored mirrors, multi-layered designs, and dynamic cosmic effects. This web-based tool lets you tweak scale, nodes, layers, and ratios, with options for logarithmic or linear growth, gradient strokes, dashed lines, and auto-rotation. Explore 12 presets—from the ethereal **Nebula** to the rippling **Cosmic Wave**—or craft your own visual masterpiece.
 
-**[Live Demo](https://jasonbra1n.github.io/kathara-spiral/)** | **[Repository](https://github.com/jasonbra1n/kathara-spiral)**
+An interactive web-based visualizer that creates mesmerizing spiral patterns with customizable parameters and mirror effects. Built with HTML, CSS, and JavaScript, this project allows users to experiment with spirals, layers, mirroring, and colors, and download high-resolution images of their creations.
+
+**[Live Demo](https://jasonbra1n.github.io/Audio-Visualizer/)** | **[Repository](https://github.com/jasonbra1n/Audio-Visualizer)**
 
 ## Features
 
@@ -28,10 +30,10 @@ An interactive web-based spiral generator that creates mesmerizing Kathara-inspi
 
 ## Usage
 
-1. Open the [live demo](https://jasonbra1n.github.io/kathara-spiral/) in your browser.
+1. Open the [live demo](https://jasonbra1n.github.io/Audio-Visualizer/) in your browser.
 2. Use the controls to customize your spiral:
    - **Core Parameters**: Adjust scale, nodes, rotation, and toggle auto-rotation.
-   - **Layer Controls**: Set the number of layers (max 100) and layer ratio, or use Golden/Silver Ratio buttons.
+   - **Layer Controls**: Set the number of layers (max 100) and layer ratio, or use the Golden/Silver Ratio buttons.
    - **Mirror Effects**: Enable mirroring and pick colors for vertical, horizontal, or both.
    - **Style Options**: Choose colors, line width, opacity, spiral type, gradient stroke, and dashed lines.
 3. Click "Download Image (2160×2160)" to save your creation as a high-resolution PNG.
@@ -42,11 +44,11 @@ To run this project locally:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/jasonbra1n/kathara-spiral.git
+   git clone https://github.com/jasonbra1n/Audio-Visualizer.git
    ```
 2. **Navigate to the Project Directory**:
    ```bash
-   cd kathara-spiral
+   cd Audio-Visualizer
    ```
 3. **Open `index.html`**:
    - Use a local server (recommended) for full functionality:
@@ -94,7 +96,7 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-- Inspired by geometric art and the Kathara grid.
+- Inspired by geometric art and audio-reactive visuals.
 - Built with love for creative coding and interactive web experiences.
 - Special thanks to collaborators for feedback and feature ideas!
 
