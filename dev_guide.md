@@ -14,6 +14,18 @@ Welcome to the developer guide for the Audio Visualizer. This document provides 
 - **`ui.js`**: Contains all event listeners and DOM manipulation logic for the control panel, presets, and other user interface elements.
 - **`state.js`**: Manages the application's state, including the undo history and the reset functionality.
 
+## Special Directories
+
+### `.gemini/`
+This folder contains context files to assist AI coding tools in understanding the project's specific architecture and standards.
+- **`PROJECT_CONTEXT.md`**: A high-level overview of the architecture, file responsibilities, and key constraints.
+- **`CODING_STANDARDS.md`**: The specific coding style and conventions used in this project.
+
+### `.github/`
+This folder contains configuration files for GitHub features.
+- **`CONTRIBUTING.md`**: Instructions for new contributors.
+- **`ISSUE_TEMPLATE/`**: Markdown templates for bug reports and feature requests.
+
 ## How to Contribute
 
 ### Running Locally
@@ -46,7 +58,7 @@ To change the fundamental appearance of the lines, you will need to modify the G
 
 To keep the project organized and track its progress, it's important to maintain the following files:
 
-- **`changelog.md`**: When you add a feature, fix a bug, or make any notable change, add a line item to the `[Unreleased]` section of the changelog. This helps everyone see what's new in upcoming releases.
+- **`CHANGELOG.md`**: When you add a feature, fix a bug, or make any notable change, add a line item to the `[Unreleased]` section of the changelog. This helps everyone see what's new in upcoming releases.
 
 - **`README.md`**: As the project's front page, the README should always reflect the current state of the application. When adding significant user-facing features (e.g., new audio options) or content (e.g., new presets), make sure the "Features" and "Presets" sections are updated accordingly.
 

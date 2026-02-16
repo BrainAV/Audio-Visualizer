@@ -11,6 +11,10 @@ The immediate goals are to refine the existing features, improve performance, an
   - [x] Optimize the animation loop to avoid unnecessary DOM reads on every frame and use `lerp` for smooth transitions. *(Discovered in `/2` prototype)*.
   - [x] Convert `styles.css` to use CSS variables for easier theming.
 
+- **[x] Documentation:**
+  - [x] Create `DEV_GUIDE.md` for architecture overview.
+  - [x] Create `CONTRIBUTING.md` for contribution guidelines.
+
 - **[ ] UI/UX Enhancements:**
   - [x] Add a "Start/Stop Audio" button to give users more explicit control over microphone access.
   - [ ] Improve layout and responsiveness of the controls panel for smaller screens.
@@ -36,6 +40,13 @@ This version will focus on integrating more advanced audio analysis techniques, 
 - **[ ] Advanced Audio Analysis:**
   - [ ] Implement FFT (Fast Fourier Transform) to analyze audio frequency data, not just amplitude.
   - [ ] Allow different visual parameters to react to different frequency ranges (e.g., bass frequencies affect scale, treble affects color or rotation speed).
+
+- **[ ] Multi-Layer Composition System:**
+  - [ ] Implement a layer manager allowing users to stack multiple visual effects (e.g., Spiral + Spectrum Analyzer).
+  - [ ] Add controls for reordering layers and adjusting individual layer opacity/blending modes.
+  - [ ] Develop new effect types to populate layers:
+    - [ ] Reactive Fractals.
+    - [ ] Spectrum Analyzer (Frequency Bars/Waveforms).
 
 - **[ ] New Visual Modes:**
   - [ ] Introduce new visualizer types beyond spirals (e.g., frequency bars, circular waveforms, particle systems, tunnel effects) leveraging the WebGL engine.

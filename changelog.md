@@ -8,8 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Created `.github` directory containing `CONTRIBUTING.md` and `ISSUE_TEMPLATE` configurations.
+- Created `.gemini` directory with `PROJECT_CONTEXT.md` and `CODING_STANDARDS.md` to assist AI development.
 
 ### Changed
+- Updated repository references in `README.md` to the new `BrainAV` organization.
+- Standardized documentation filenames to uppercase (`CHANGELOG.md`, `ROADMAP.md`, `DEV_GUIDE.md`).
+- Updated `DEV_GUIDE.md` to reflect the new folder structure and contribution workflow.
 
 ### Fixed
 
@@ -17,14 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added a "Start/Stop Audio" button for explicit user control over microphone access.
-- Added user documentation and new visual styles to the `roadmap.md`.
-- `roadmap.md` for planning future development.
-- `dev_guide.md` for contributor guidelines.
-- `changelog.md` to track project changes.
+- Added user documentation and new visual styles to the `ROADMAP.md`.
+- `ROADMAP.md` for planning future development.
+- `DEV_GUIDE.md` for contributor guidelines.
+- `CHANGELOG.md` to track project changes.
 - **Major Upgrade**: Replaced 2D Canvas renderer with a high-performance WebGL engine from the `/3/` prototype.
 
 ### Changed
-- Updated `dev_guide.md` with current instructions for adding presets and maintaining `README.md`.
+- Updated `DEV_GUIDE.md` with current instructions for adding presets and maintaining `README.md`.
 - Updated `README.md` to reflect the current number of presets (16) and features.
 - Updated project title in `index.html` and `README.md` to "Audio Visualizer".
 - Refactored `styles.css` to use CSS variables for easier theming and maintenance.

@@ -1,4 +1,4 @@
-https://jasonbra1n.github.io/Audio-Visualizer/
+https://brainav.github.io/Audio-Visualizer/
 
 # Audio Visualizer
 
@@ -6,7 +6,7 @@ Create stunning, customizable spiral visualizations with vibrant colored mirrors
 
 An interactive web-based visualizer that creates mesmerizing spiral patterns with customizable parameters and mirror effects. Built with HTML, CSS, and JavaScript, this project allows users to experiment with spirals, layers, mirroring, and colors, and download high-resolution images of their creations.
 
-**[Live Demo](https://jasonbra1n.github.io/Audio-Visualizer/)** | **[Repository](https://github.com/jasonbra1n/Audio-Visualizer)**
+**[Live Demo](https://brainav.github.io/Audio-Visualizer/)** | **[Repository](https://github.com/BrainAV/Audio-Visualizer)**
 
 ## Features
 
@@ -32,7 +32,7 @@ An interactive web-based visualizer that creates mesmerizing spiral patterns wit
 
 ## Usage
 
-1. Open the [live demo](https://jasonbra1n.github.io/Audio-Visualizer/) in your browser.
+1. Open the [live demo](https://brainav.github.io/Audio-Visualizer/) in your browser.
 2. Use the controls to customize your spiral:
    - **Core Parameters**: Adjust scale, nodes, rotation, and toggle auto-rotation.
    - **Layer Controls**: Set the number of layers (max 100) and layer ratio, or use the Golden/Silver Ratio buttons.
@@ -46,7 +46,7 @@ To run this project locally:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/jasonbra1n/Audio-Visualizer.git
+   git clone https://github.com/BrainAV/Audio-Visualizer.git
    ```
 2. **Navigate to the Project Directory**:
    ```bash
@@ -100,6 +100,8 @@ To run this project locally:
 
 ## Contributing
 
+We welcome contributions! Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on how to set up the project locally, coding standards, and the pull request process.
+
 Feel free to fork this repository and submit pull requests with enhancements or bug fixes. Suggestions are welcome via GitHub Issues!
 
 ## License
@@ -114,4 +116,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
-Created by [jasonbra1n](https://github.com/jasonbra1n) | December 2025
+Created by BrainAV | December 2025
