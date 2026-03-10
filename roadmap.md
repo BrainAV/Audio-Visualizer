@@ -64,6 +64,10 @@ This version will focus on integrating more advanced audio analysis techniques, 
 
 ## Version 3.0 (Future Vision)
 
+- **[ ] Hardware Integration (MIDI):**
+  - [ ] Implement Web MIDI API support to bind physical faders and knobs to visualizer parameters (e.g., scale, opacity, rotation).
+  - [ ] Build a "MIDI Learn" interface allowing users to custom-map their controllers.
+
 - **[ ] User Customization & Saving:**
   - [ ] Allow users to save their own custom presets to their browser's local storage.
   - [ ] Implement a system for sharing presets via URLs.
