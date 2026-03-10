@@ -21,6 +21,7 @@
 <body>
   <canvas id="spiralCanvas"></canvas>
   <div id="controlsOverlay" class="controls-overlay">
+    <button id="infoButton" class="info-btn" data-tooltip="Information & Help">?</button>
     <button id="toggleControls" class="toggle-controls">Hide Controls</button>
     <h2>Audio Visualizer</h2>
     <div class="controls">
@@ -47,6 +48,7 @@
         <div id="audioOptions" style="display: none; margin-left: 20px;">
           <label data-tooltip="Makes rotation reactive to audio."><input type="checkbox" id="audioRotate"> Rotate</label>
           <label data-tooltip="Makes scale reactive to audio."><input type="checkbox" id="audioScale"> Scale</label>
+          <label data-tooltip="Makes line width reactive to audio."><input type="checkbox" id="audioLineWidth"> Line Width</label>
           <label data-tooltip="Makes opacity reactive to audio."><input type="checkbox" id="audioOpacity"> Opacity</label>
           <label data-tooltip="Maximum amount the scale can increase with audio.">Scale Gap: <input type="range" id="scaleGap" min="1" max="50" value="10"> <span id="scaleGapValue">10</span></label>
           <label data-tooltip="How strongly the scale reacts to audio.">Scale Sensitivity: <input type="range" id="scaleSensitivity" min="0.5" max="5" step="0.1" value="1"> <span id="scaleSensitivityValue">1</span></label>
@@ -56,7 +58,8 @@
       <div class="control-group">
         <h3>Core Parameters</h3>
         <label data-tooltip="Controls the overall size of the spiral.">Scale: <input type="range" id="scale" min="1" max="100" step="0.1" value="30"> <span id="scaleValue">30</span></label>
-        <label data-tooltip="Number of points in each spiral arm.">Nodes: <input type="range" id="nodes" min="5" max="50" value="12"> <span id="nodesValue">12</span></label>
+        <label data-tooltip="Number of points in each spiral arm.">Nodes: <input type="range" id="nodes" min="5" max="300" value="12"> <span id="nodesValue">12</span></label>
+        <label data-tooltip="The angle between each sequence point. 60=Hexagon, 90=Square, 137.5=Golden Angle.">Angle Step: <input type="range" id="angleStep" min="1" max="360" step="0.1" value="60"> <span id="angleStepValue">60</span></label>
         <label data-tooltip="Sets the starting angle of the spiral.">Rotation: <input type="range" id="rotation" min="0" max="360" value="0"> <span id="rotationValue">0</span></label>
       </div>
 
@@ -117,6 +120,28 @@
 
   <div id="fullscreenOverlay" class="fullscreen-overlay">
     Press ESC to exit full screen
+  </div>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Audio Visualizer</h2>
+      <p>Interactive web-based visualizer for massive, hypnotic spiral patterns.</p>
+      
+      <h3>How To Use</h3>
+      <ul>
+        <li><strong>Presets:</strong> Use the dropdown to jump to a predefined setup.</li>
+        <li><strong>Audio Reactivity:</strong> Toggle "Audio Reactive" and allow microphone access to make the visualizer pulse to the beat.</li>
+        <li><strong>Controls:</strong> Tweak scale, nodes, layers, and coloring to your liking. Most sliders provide instant updates.</li>
+        <li><strong>Download:</strong> Once you love your visual, generate a high-res 2160x2160 PNG snapshot.</li>
+      </ul>
+      
+      <h3>Screensaver Mode</h3>
+      <p>The UI will automatically fade out if you leave your mouse still for 4 seconds, creating an immersive full-screen experience.</p>
+      
+      <p style="margin-top: 30px; font-size: 0.9em; color: #888;">Built by the BrainAV team.</p>
+    </div>
   </div>
 
   <script src="presets.js"></script>

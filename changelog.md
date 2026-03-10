@@ -8,10 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Screensaver Mode**: UI controls panel fades out when idle for 4 seconds to prevent screen burn-in.
+- **Info/About Modal**: Added an informational modal, accessible via a `?` button, containing a "How To Use" guide and project details.
+- **Angle Step Parameter**: Added an "Angle Step" parameter to allow dynamic polygonal/geometric spiral shapes (e.g., squares, Golden Ratio/Fibonacci spirals) beyond the hard-coded hexagon.
+- **Audio-Reactive Line Width**: Line width can now dynamically react to audio amplitude.
 - Created `.github` directory containing `CONTRIBUTING.md` and `ISSUE_TEMPLATE` configurations.
 - Created `.gemini` directory with `PROJECT_CONTEXT.md` and `CODING_STANDARDS.md` to assist AI development.
 
 ### Changed
+- **WebGL Performance Optimization**: Refactored the core rendering engine (`drawing.js` and `webgl-setup.js`) to cache geometry and perform transformations (rotation, scaling, mirroring) entirely on the GPU, greatly improving performance (smooth 60 fps) for auto-rotation and audio reactivity.
 - Updated repository references in `README.md` to the new `BrainAV` organization.
 - Standardized documentation filenames to uppercase (`CHANGELOG.md`, `ROADMAP.md`, `DEV_GUIDE.md`).
 - Updated `DEV_GUIDE.md` to reflect the new folder structure and contribution workflow.

@@ -4,14 +4,50 @@ function setupWebGL(gl) {
     attribute float a_distance;
     attribute float a_width;
     attribute vec2 a_normal;
+    
     uniform vec2 u_resolution;
+    uniform vec2 u_center;
+    uniform float u_scale;
+    uniform float u_rotation;
+    uniform vec2 u_mirror; // vec2(1.0 or -1.0, 1.0 or -1.0)
+    
     varying float v_distance;
     varying float v_width;
     varying vec2 v_normal;
+    
     void main() {
-      vec2 clipSpace = (a_position / u_resolution) * 2.0 - 1.0;
+      // 1. apply scale to the spine
+      vec2 pos = a_position * u_scale;
+      vec2 norm = a_normal;
+      
+      // 2. apply rotation
+      float c = cos(u_rotation);
+      float s = sin(u_rotation);
+      mat2 rot = mat2(c, -s, s, c);
+      
+      pos = rot * pos;
+      norm = rot * norm;
+
+      // 3. apply mirror to spine and normal
+      pos.x *= u_mirror.x;
+      pos.y *= u_mirror.y;
+      
+      // When we mirror X, the normal's angle reflects, meaning X stays the same but Y negates?
+      // Wait, let's keep it simple: just mirror the normal identically to the position
+      norm.x *= u_mirror.x;
+      norm.y *= u_mirror.y;
+      
+      // 4. apply normal offset (unscaled)
+      pos += norm;
+      
+      // 5. translate to center
+      pos += u_center;
+
+      vec2 clipSpace = (pos / u_resolution) * 2.0 - 1.0;
       gl_Position = vec4(clipSpace.x, -clipSpace.y, 0.0, 1.0);
-      v_distance = a_distance;
+      
+      // Passthrough variables; scale distance so gradients stretch correctly
+      v_distance = a_distance * u_scale;
       v_width = a_width;
       v_normal = a_normal;
     }
@@ -80,6 +116,10 @@ function setupWebGL(gl) {
     width: gl.getAttribLocation(program, 'a_width'),
     normal: gl.getAttribLocation(program, 'a_normal'),
     resolution: gl.getUniformLocation(program, 'u_resolution'),
+    center: gl.getUniformLocation(program, 'u_center'),
+    scale: gl.getUniformLocation(program, 'u_scale'),
+    rotation: gl.getUniformLocation(program, 'u_rotation'),
+    mirror: gl.getUniformLocation(program, 'u_mirror'),
     color: gl.getUniformLocation(program, 'u_color'),
     dashSize: gl.getUniformLocation(program, 'u_dashSize'),
     gapSize: gl.getUniformLocation(program, 'u_gapSize'),

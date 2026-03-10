@@ -30,6 +30,9 @@ function initUI() {
           document.getElementById('scale').value = baseScale;
           document.getElementById('scaleValue').textContent = baseScale.toFixed(1);
         }
+        if (key === 'lineWidth') {
+          baseLineWidth = parseFloat(preset[key]);
+        }
       });
       saveState();
       drawSpiral();
@@ -50,6 +53,9 @@ function initUI() {
       }
       if (this.id === 'scale' && !currentParams.audioReactive) {
         baseScale = parseFloat(this.value);
+      }
+      if (this.id === 'lineWidth' && !currentParams.audioReactive) {
+        baseLineWidth = parseFloat(this.value);
       }
       drawSpiral();
     });
@@ -109,6 +115,18 @@ function initUI() {
     drawSpiral();
   });
 
+  const audioLineWidthCheckbox = document.getElementById('audioLineWidth');
+  if (audioLineWidthCheckbox) {
+    audioLineWidthCheckbox.addEventListener('change', function() {
+      currentParams.audioLineWidth = this.checked;
+      if (!this.checked) {
+        document.getElementById('lineWidth').value = baseLineWidth;
+        document.getElementById('lineWidthValue').textContent = baseLineWidth.toFixed(0);
+      }
+      drawSpiral();
+    });
+  }
+
   document.getElementById('audioRotate').addEventListener('change', function() {
     currentParams.audioRotate = this.checked;
     drawSpiral();
@@ -132,11 +150,12 @@ function initUI() {
   });
 
   // Allow manual adjustments during audio reactivity
-  ['scale', 'opacity'].forEach(id => {
+  ['scale', 'lineWidth', 'opacity'].forEach(id => {
     const input = document.getElementById(id);
     input.addEventListener('input', function() {
-      if (currentParams.audioReactive && id === 'scale' && !currentParams.audioScale) {
-        baseScale = parseFloat(this.value);
+      if (currentParams.audioReactive) {
+        if (id === 'scale' && !currentParams.audioScale) baseScale = parseFloat(this.value);
+        if (id === 'lineWidth' && !currentParams.audioLineWidth) baseLineWidth = parseFloat(this.value);
       }
       document.getElementById(id + 'Value').textContent = id === 'opacity' ? this.value : parseFloat(this.value).toFixed(1);
       drawSpiral();
@@ -144,10 +163,27 @@ function initUI() {
   });
 
   // -------------------------------
-  // Controls Toggle
+  // Controls Toggle & Info Modal
   // -------------------------------
   const controlsOverlay = document.getElementById('controlsOverlay');
   const toggleButton = document.getElementById('toggleControls');
+  const infoButton = document.getElementById('infoButton');
+  const infoModal = document.getElementById('infoModal');
+  const closeModal = document.querySelector('.close-modal');
+  
+  infoButton.addEventListener('click', () => {
+    infoModal.style.display = 'block';
+  });
+
+  closeModal.addEventListener('click', () => {
+    infoModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target == infoModal) {
+      infoModal.style.display = 'none';
+    }
+  });
   const controlsNotice = document.createElement('div');
   controlsNotice.id = 'controlsNotice';
   controlsNotice.className = 'controls-notice';
@@ -272,6 +308,36 @@ function initUI() {
       fullscreenOverlay.style.display = 'none';
     }, 3000);
   }
+
+  // -------------------------------
+  // Screensaver (Idle Timer)
+  // -------------------------------
+  let idleTimer;
+  const IDLE_TIMEOUT = 4000; // 4 seconds
+  const uiElements = [controlsOverlay, toggleButton, infoButton];
+
+  function resetIdleTimer() {
+    // Remove idle class
+    uiElements.forEach(el => el.classList.remove('idle'));
+    
+    // Clear and restart timer
+    clearTimeout(idleTimer);
+    
+    // Only set timer if controls are actually manually shown
+    if (controlsOverlay.style.display !== 'none') {
+      idleTimer = setTimeout(() => {
+        uiElements.forEach(el => el.classList.add('idle'));
+      }, IDLE_TIMEOUT);
+    }
+  }
+
+  // Monitor user activity globally
+  ['mousemove', 'mousedown', 'touchstart', 'keydown'].forEach(evt => {
+    window.addEventListener(evt, resetIdleTimer, true);
+  });
+  
+  // Initial start
+  resetIdleTimer();
 }
 
 initUI();

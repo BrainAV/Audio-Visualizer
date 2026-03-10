@@ -61,6 +61,24 @@ function animateAudioReactive() {
       document.getElementById('rotationValue').textContent = Math.round(rotationInput.value);
     }
 
+    if (currentParams.audioLineWidth) {
+      const lineWidthInput = document.getElementById('lineWidth');
+      const currentWidth = parseFloat(lineWidthInput.value);
+      let targetWidth;
+      if (amplitude > 0.05) {
+        // Map amplitude to a width increase (e.g. up to +8px)
+        const fluctuation = amplitude * 5 * currentParams.scaleSensitivity;
+        targetWidth = baseLineWidth + fluctuation;
+        // Keep within slider bounds (1 to 10)
+        targetWidth = Math.min(Math.max(targetWidth, 1), 10);
+      } else {
+        targetWidth = baseLineWidth;
+      }
+      const newWidth = lerp(currentWidth, targetWidth, 0.2);
+      lineWidthInput.value = newWidth;
+      document.getElementById('lineWidthValue').textContent = newWidth.toFixed(0);
+    }
+
     if (currentParams.audioScale) {
       const currentScale = parseFloat(scaleInput.value);
       let targetScale;

@@ -39,6 +39,12 @@ body {
   z-index: 2;
   overflow-y: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.5s ease;
+}
+
+.controls-overlay.idle {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .toggle-controls {
@@ -51,10 +57,43 @@ body {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: var(--border-radius-small);
+  transition: opacity 0.5s ease;
+}
+
+.toggle-controls.idle {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .toggle-controls:hover {
   background: var(--control-hover-bg-color);
+}
+
+.info-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--control-bg-color);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, opacity 0.5s ease;
+}
+
+.info-btn:hover {
+  background: var(--control-hover-bg-color);
+}
+
+.info-btn.idle {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .controls {
@@ -169,4 +208,46 @@ button:hover {
   padding: 10px 20px;
   border-radius: var(--border-radius-small);
   z-index: 3;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background-color: var(--main-bg-color);
+  color: var(--text-color);
+  margin: 10% auto;
+  padding: 20px 30px;
+  border: 1px solid #444;
+  border-radius: var(--border-radius-large);
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.close-modal {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: white;
+  text-decoration: none;
 }

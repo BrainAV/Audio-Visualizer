@@ -45,6 +45,8 @@ function reset() {
   document.getElementById('scaleGapValue').textContent = defaultParams.scaleGap;
   document.getElementById('scaleSensitivity').value = defaultParams.scaleSensitivity;
   document.getElementById('scaleSensitivityValue').textContent = defaultParams.scaleSensitivity;
+  document.getElementById('angleStep').value = defaultParams.angleStep;
+  document.getElementById('angleStepValue').textContent = defaultParams.angleStep;
   history = [];
   drawSpiral();
 }

@@ -20,14 +20,15 @@ The immediate goals are to refine the existing features, improve performance, an
   - [ ] Improve layout and responsiveness of the controls panel for smaller screens.
   - [x] Integrate advanced mobile touch controls (pinch-to-zoom, drag-to-rotate) from the `/2` prototype.
   - [x] Add tooltips to explain what each control does.
+  - [x] Implement an idle "Screensaver Mode" that hides UI controls after inactivity to prevent screen burn-in and enhance the overlay experience.
 
 - **[ ] Core Feature Improvements:**
-  - [ ] Add more parameters for audio reactivity (e.g., line width, number of nodes, layer ratio).
+  - [ ] Add more parameters for audio reactivity (e.g., *line width [x]*, number of nodes, layer ratio).
   - [ ] Create new presets specifically designed for audio visualization.
 
-- **[ ] User Documentation:**
-  - [ ] Create a user-friendly "How to Use" guide accessible from the main UI.
-  - [ ] Add an "About" page detailing the project's purpose, features, and technology.
+- **[x] User Documentation:**
+  - [x] Create a user-friendly "How to Use" guide accessible from the main UI.
+  - [x] Add an "About" page detailing the project's purpose, features, and technology.
 
 ## Version 2.0 (Enhanced Reactivity)
 
@@ -45,16 +46,17 @@ This version will focus on integrating more advanced audio analysis techniques, 
   - [ ] Implement a layer manager allowing users to stack multiple visual effects (e.g., Spiral + Spectrum Analyzer).
   - [ ] Add controls for reordering layers and adjusting individual layer opacity/blending modes.
   - [ ] Develop new effect types to populate layers:
-    - [ ] Reactive Fractals.
+    - [ ] Reactive Fractals (Full Fractal Visualizer with its own dedicated settings).
     - [ ] Spectrum Analyzer (Frequency Bars/Waveforms).
 
 - **[ ] New Visual Modes:**
-  - [ ] Introduce new visualizer types beyond spirals (e.g., frequency bars, circular waveforms, particle systems, tunnel effects) leveraging the WebGL engine.
+  - [ ] Introduce new visualizer types beyond spirals (e.g., standalone Fractal Visualizer, frequency bars, circular waveforms, particle systems, tunnel effects) leveraging the WebGL engine.
   - [ ] Allow color to be reactive to audio frequency or amplitude.
 
 - **[ ] Input Sources:**
   - [ ] Add support for playing and visualizing local audio files (MP3, WAV).
   - [ ] Add support for selecting a different microphone input device.
+  - [ ] Integrate with the Radio Stream Player (Unified Architecture) to visualize the web audio stream directly.
 
 ## Version 3.0 (Future Vision)
 
