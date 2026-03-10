@@ -38,15 +38,16 @@ This version will focus on integrating more advanced audio analysis techniques, 
   - [x] Explore and implement WebGL for significantly improved performance. *(Discovered in `/3` prototype)*.
   - [x] Re-implement `curvedLines` functionality in the new WebGL engine.
 
-- **[ ] Advanced Audio Analysis:**
+- **[x] Multi-Layer Composition Architecture (The Framework):**
+  - [x] Refactor state and rendering engine to support an array of generic visual layers.
+  - [x] Implement a layer manager allowing users to add, stack, reorder, and blend multiple visual effects.
+  - [x] Define a standard plugin interface for new visualizers (e.g., `init()`, `update()`, `draw()`, `ui()`).
+  - [x] Refactor the existing "Original Spiral" to plug into this new system as the first visualizer type.
+
+- **[ ] Advanced Audio Analysis (⭐️ Next Priority):**
   - [ ] Implement FFT (Fast Fourier Transform) to analyze audio frequency data, not just amplitude.
   - [ ] Allow different visual parameters to react to different frequency ranges (e.g., bass frequencies affect scale, treble affects color or rotation speed).
 
-- **[ ] Multi-Layer Composition Architecture (The Framework):**
-  - [ ] Refactor state and rendering engine to support an array of generic visual layers.
-  - [ ] Implement a layer manager allowing users to add, stack, reorder, and blend multiple visual effects.
-  - [ ] Define a standard plugin interface for new visualizers (e.g., `init()`, `update()`, `draw()`, `ui()`).
-  - [ ] Refactor the existing "Original Spiral" to plug into this new system as the first visualizer type.
 
 - **[ ] New Visual Modes (Plugins):**
   - [x] Build the "Fractal Visualizer" plugin (Mandelbrot/Julia sets) with its own dedicated UI settings.
