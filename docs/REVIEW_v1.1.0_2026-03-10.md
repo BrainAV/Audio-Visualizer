@@ -61,3 +61,19 @@ Based on the Roadmap and this review, here is the suggested chronological order 
 2.  **Implement FFT Logic:** Transition from Amplitude-only to Frequency-based reactivity.
 3.  **Add Post-Processing (Bloom):** To drastically elevate the visual fidelity.
 4.  **Local Storage Presets:** To give users ownership of their creations.
+
+---
+
+### **✅ Feature Ideas Checklist**
+A condensed list of all specific feature suggestions from this review:
+
+- [ ] **Architecture:** Abstract a `ShaderManager` for compiling and caching GLSL materials.
+- [ ] **Architecture:** Move line thickening and curve generation to the WebGL Vertex Shader.
+- [ ] **Visuals:** Add Post-Processing Pipeline (Bloom & Glow).
+- [ ] **Visuals:** Implement Shader Toy Support for pasting raw GLSL fragment code.
+- [ ] **Audio:** Implement Frequency Analysis (FFT) with `getByteFrequencyData()`.
+- [ ] **Audio:** Map specific frequency ranges (Bass, Mids, Treble) to specific visual parameters.
+- [ ] **Audio:** Pipe raw audio array into a 1D WebGL Texture.
+- [ ] **UI/UX:** Add "Save/Load Custom Preset" using `localStorage`.
+- [ ] **UI/UX:** Implement 10-second WebM video loop recording and export (`canvas.captureStream()`).
+- [ ] **UI/UX:** Integrate a custom color picker or a harmonious "Color Palette Generator".
