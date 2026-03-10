@@ -42,6 +42,7 @@ An interactive web-based visualizer that creates mesmerizing spiral patterns wit
    - **Mirror Effects**: Enable mirroring and pick colors for vertical, horizontal, or both.
    - **Style Options**: Choose colors, line width, opacity, spiral type, gradient stroke, and dashed lines.
 3. Click "Download Image (2160×2160)" to save your creation as a high-resolution PNG.
+4. **Want to visualize system audio (Spotify/YouTube)?** Read our [Audio Routing Guide](docs/AUDIO_ROUTING_GUIDE.md) to set up virtual cables.
 
 ## Installation
 
