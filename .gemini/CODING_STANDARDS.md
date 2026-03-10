@@ -14,3 +14,12 @@
 
 ## CSS
 - Use CSS variables (defined in `:root`) for colors and dimensions.
+
+## Commit Messages
+Follow the Conventional Commits specification to help automate changelog generation.
+**Examples:**
+- `feat: add fractal visualizer layer`
+- `fix: resolve WebGL texture binding state leak`
+- `docs: update ROADMAP with new audio reactivity goals`
+- `refactor: extract drawing logic into spiral.js plugin`
+- `chore(release): prepare v1.1.0`

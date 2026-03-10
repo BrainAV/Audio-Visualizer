@@ -15,6 +15,7 @@ Before addressing my request, please review the following key files to ensure yo
 4.  **`DEV_GUIDE.md`**: For developer workflows, project structure, and specific implementation guides.
 5.  **`.gemini/PROJECT_CONTEXT.md`**: For the technical architecture and file responsibilities.
 6.  **`.gemini/CODING_STANDARDS.md`**: For specific coding conventions.
+7.  **`.gemini/PERSONA.md`**: To align with your AI identity and core architectural objectives for this repository.
 
 ---
 
