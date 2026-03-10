@@ -55,60 +55,117 @@
         </div>
       </div>
 
-      <div class="control-group">
-        <h3>Core Parameters</h3>
-        <label data-tooltip="Controls the overall size of the spiral.">Scale: <input type="range" id="scale" min="1" max="100" step="0.1" value="30"> <span id="scaleValue">30</span></label>
-        <label data-tooltip="Number of points in each spiral arm.">Nodes: <input type="range" id="nodes" min="5" max="300" value="12"> <span id="nodesValue">12</span></label>
-        <label data-tooltip="The angle between each sequence point. 60=Hexagon, 90=Square, 137.5=Golden Angle.">Angle Step: <input type="range" id="angleStep" min="1" max="360" step="0.1" value="60"> <span id="angleStepValue">60</span></label>
-        <label data-tooltip="Sets the starting angle of the spiral.">Rotation: <input type="range" id="rotation" min="0" max="360" value="0"> <span id="rotationValue">0</span></label>
-      </div>
-
-      <div class="control-group">
-        <h3>Layer Controls</h3>
-        <label data-tooltip="Number of concentric spiral layers.">Layers: <input type="range" id="layers" min="1" max="100" value="3"> <span id="layersValue">3</span></label>
-        <label data-tooltip="Spacing between layers. >1 grows, <1 shrinks.">Layer Ratio: 
-          <input type="range" id="layerRatio" min="0.1" max="10" step="0.1" value="2">
-          <span id="layerRatioValue">2</span>
-        </label>
-        <div>
-          <button onclick="setRatio(1.618)" data-tooltip="Set layer ratio to the Golden Ratio (φ ≈ 1.618).">Golden Ratio</button>
-          <button onclick="setRatio(2.414)" data-tooltip="Set layer ratio to the Silver Ratio (δS ≈ 2.414).">Silver Ratio</button>
+      <div class="control-group" id="layerManager">
+        <h3>Layers</h3>
+        <select id="layerList" size="4" style="margin-bottom: 5px;">
+        </select>
+        <div style="display: flex; gap: 5px;">
+          <button id="addSpiralLayerBtn" data-tooltip="Add a new Spiral Layer">+ Spiral</button>
+          <button id="addFractalLayerBtn" data-tooltip="Add a new Fractal Layer">+ Fractal</button>
+          <button id="removeLayerBtn" data-tooltip="Remove selected layer" style="margin-left:auto;">- Remove</button>
         </div>
       </div>
 
-      <div class="control-group">
-        <h3>Mirror Effects</h3>
-        <label data-tooltip="Mirrors the spiral across the vertical axis."><input type="checkbox" id="verticalMirror"> Vertical Mirror</label>
-        <label data-tooltip="Mirrors the spiral across the horizontal axis."><input type="checkbox" id="horizontalMirror"> Horizontal Mirror</label>
-        <div class="mirror-colors">
-          <label>Vertical Color: <input type="color" id="verticalColor" value="#FF00FF"></label>
-          <label>Horizontal Color: <input type="color" id="horizontalColor" value="#FFFF00"></label>
-          <label>Both Color: <input type="color" id="bothColor" value="#FFFFFF"></label>
+      <div class="control-group" id="layerTransform">
+        <h3>Layer Transform</h3>
+        <label data-tooltip="Sets the starting angle.">Rotation: <input type="range" id="rotation" min="0" max="360" value="0"> <span id="rotationValue">0</span></label>
+        <label data-tooltip="Rotation speed and direction when Auto-Rotate is on.">Spin Speed: <input type="range" id="autoRotateSpeed" min="-10" max="10" step="0.1" value="1.0"> <span id="autoRotateSpeedValue">1</span></label>
+      </div>
+
+      <div id="spiralControlsContainer">
+        <div class="control-group">
+          <h3>Spiral Core Parameters</h3>
+          <label data-tooltip="Controls the overall size of the visual.">Scale: <input type="range" id="scale" min="1" max="100" step="0.1" value="30"> <span id="scaleValue">30</span></label>
+          <label data-tooltip="Number of points in each spiral arm.">Nodes: <input type="range" id="nodes" min="5" max="300" value="12"> <span id="nodesValue">12</span></label>
+          <label data-tooltip="The angle between each sequence point. 60=Hexagon, 90=Square, 137.5=Golden Angle.">Angle Step: <input type="range" id="angleStep" min="1" max="360" step="0.1" value="60"> <span id="angleStepValue">60</span></label>
+        </div>
+
+        <div class="control-group">
+          <h3>Spiral Layer Controls</h3>
+          <label data-tooltip="Number of concentric spiral layers.">Layers: <input type="range" id="layers" min="1" max="100" value="3"> <span id="layersValue">3</span></label>
+          <label data-tooltip="Spacing between layers. >1 grows, <1 shrinks.">Layer Ratio: 
+            <input type="range" id="layerRatio" min="0.1" max="10" step="0.1" value="2">
+            <span id="layerRatioValue">2</span>
+          </label>
+          <div>
+            <button onclick="setRatio(1.618)" data-tooltip="Set layer ratio to the Golden Ratio (φ ≈ 1.618).">Golden Ratio</button>
+            <button onclick="setRatio(2.414)" data-tooltip="Set layer ratio to the Silver Ratio (δS ≈ 2.414).">Silver Ratio</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>Spiral Mirror Effects</h3>
+          <label data-tooltip="Mirrors the spiral across the vertical axis."><input type="checkbox" id="verticalMirror"> Vertical Mirror</label>
+          <label data-tooltip="Mirrors the spiral across the horizontal axis."><input type="checkbox" id="horizontalMirror"> Horizontal Mirror</label>
+          <div class="mirror-colors">
+            <label>Vertical Color: <input type="color" id="verticalColor" value="#FF00FF"></label>
+            <label>Horizontal Color: <input type="color" id="horizontalColor" value="#FFFF00"></label>
+            <label>Both Color: <input type="color" id="bothColor" value="#FFFFFF"></label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>Spiral Style Options</h3>
+          <label data-tooltip="The main color of the primary spiral.">Color: <input type="color" id="strokeColor" value="#00FFFF"></label>
+          <label data-tooltip="The thickness of the spiral lines.">Line Width: <input type="range" id="lineWidth" min="1" max="10" value="2"> <span id="lineWidthValue">2</span></label>
+          <label data-tooltip="The transparency of the spiral.">Opacity: <input type="range" id="opacity" min="0" max="1" step="0.1" value="1"> <span id="opacityValue">1</span></label>
+          <label data-tooltip="Linear for even spacing, Logarithmic for exponential spacing.">Spiral Type: 
+            <select id="spiralType">
+              <option value="linear">Linear</option>
+              <option value="logarithmic">Logarithmic</option>
+            </select>
+          </label>
+          <label data-tooltip="Style of the line endings (for thick lines).">Line End Style: 
+            <select id="lineEndStyle">
+              <option value="boxed">Boxed</option>
+              <option value="tapered">Tapered</option>
+              <option value="rounded">Rounded</option>
+            </select>
+          </label>
+          <label data-tooltip="The background color of the canvas.">Background Color: <input type="color" id="backgroundColor" value="#111111"></label>
+          <label data-tooltip="Fades the line color to black along its length."><input type="checkbox" id="gradientStroke" checked> Gradient Stroke</label>
+          <label data-tooltip="Renders the lines with a dashed pattern."><input type="checkbox" id="dashEffect"> Dashed Lines</label>
+          <label data-tooltip="Draws smooth curves instead of straight lines between nodes."><input type="checkbox" id="curvedLines"> Curved Lines</label>
         </div>
       </div>
 
-      <div class="control-group">
-        <h3>Style Options</h3>
-        <label data-tooltip="The main color of the primary spiral.">Color: <input type="color" id="strokeColor" value="#00FFFF"></label>
-        <label data-tooltip="The thickness of the spiral lines.">Line Width: <input type="range" id="lineWidth" min="1" max="10" value="2"> <span id="lineWidthValue">2</span></label>
-        <label data-tooltip="The transparency of the spiral.">Opacity: <input type="range" id="opacity" min="0" max="1" step="0.1" value="1"> <span id="opacityValue">1</span></label>
-        <label data-tooltip="Linear for even spacing, Logarithmic for exponential spacing.">Spiral Type: 
-          <select id="spiralType">
-            <option value="linear">Linear</option>
-            <option value="logarithmic">Logarithmic</option>
-          </select>
-        </label>
-        <label data-tooltip="Style of the line endings (for thick lines).">Line End Style: 
-          <select id="lineEndStyle">
-            <option value="boxed">Boxed</option>
-            <option value="tapered">Tapered</option>
-            <option value="rounded">Rounded</option>
-          </select>
-        </label>
-        <label data-tooltip="The background color of the canvas.">Background Color: <input type="color" id="backgroundColor" value="#111111"></label>
-        <label data-tooltip="Fades the line color to black along its length."><input type="checkbox" id="gradientStroke" checked> Gradient Stroke</label>
-        <label data-tooltip="Renders the lines with a dashed pattern."><input type="checkbox" id="dashEffect"> Dashed Lines</label>
-        <label data-tooltip="Draws smooth curves instead of straight lines between nodes."><input type="checkbox" id="curvedLines"> Curved Lines</label>
+      <div id="fractalControlsContainer" style="display: none;">
+        <div class="control-group">
+          <h3>Fractal Type</h3>
+          <label>Type: 
+            <select id="fractalType">
+              <option value="mandelbrot">Mandelbrot</option>
+              <option value="julia">Julia Set</option>
+            </select>
+          </label>
+          <label data-tooltip="Detail level of the fractal">Iterations: <input type="range" id="iterations" min="10" max="1000" step="1" value="100"> <span id="iterationsValue">100</span></label>
+          <label>Color Palette: 
+            <select id="colorPalette">
+              <option value="ocean">Ocean</option>
+              <option value="fire">Fire</option>
+              <option value="psychedelic">Psychedelic</option>
+            </select>
+          </label>
+        </div>
+        
+        <div class="control-group">
+          <h3>Positioning</h3>
+          <label data-tooltip="Zoom level">Zoom: <input type="range" id="zoom" min="0.1" max="10.0" step="0.01" value="1.0"> <span id="zoomValue">1.0</span></label>
+          <label data-tooltip="X-Offset">Offset X: <input type="range" id="offsetX" min="-2.0" max="2.0" step="0.01" value="0.0"> <span id="offsetXValue">0.0</span></label>
+          <label data-tooltip="Y-Offset">Offset Y: <input type="range" id="offsetY" min="-2.0" max="2.0" step="0.01" value="0.0"> <span id="offsetYValue">0.0</span></label>
+        </div>
+
+        <div class="control-group">
+          <h3>Julia Settings</h3>
+          <p style="font-size: 0.8em; color: #aaa; margin-top: 0;">Only visible in Julia Set mode.</p>
+          <label>Julia C (X): <input type="range" id="juliaCx" min="-2.0" max="2.0" step="0.01" value="-0.4"> <span id="juliaCxValue">-0.4</span></label>
+          <label>Julia C (Y): <input type="range" id="juliaCy" min="-2.0" max="2.0" step="0.01" value="0.6"> <span id="juliaCyValue">0.6</span></label>
+        </div>
+
+        <div class="control-group">
+          <h3>Style Options</h3>
+          <label data-tooltip="The transparency of the fractal layer">Opacity: <input type="range" id="fractalOpacity" min="0" max="1" step="0.1" value="1"> <span id="fractalOpacityValue">1</span></label>
+        </div>
       </div>
     </div>
 
@@ -146,10 +203,11 @@
 
   <script src="presets.js"></script>
   <script src="webgl-setup.js"></script>
-  <script src="drawing.js"></script>
+  <script src="visualizers/spiral.js"></script>
+  <script src="visualizers/fractal.js"></script>
   <script src="audio.js"></script>
-  <script src="script.js"></script>
   <script src="state.js"></script>
+  <script src="script.js"></script>
   <script src="ui.js"></script>
 </body>
 </html>

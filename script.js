@@ -4,125 +4,113 @@ if (!gl) throw new Error('WebGL not supported');
 
 const { program, locations } = setupWebGL(gl);
 
-let currentParams = {};
-const defaultParams = {
-  scale: 30, nodes: 12, angleStep: 60, rotation: 0, layers: 3, layerRatio: 2,
-  verticalMirror: false, horizontalMirror: false, strokeColor: '#00FFFF',
-  lineWidth: 2, opacity: 1, spiralType: 'linear', backgroundColor: '#111111',
-  verticalColor: '#FF00FF', horizontalColor: '#FFFF00', bothColor: '#FFFFFF',
-  gradientStroke: true, dashEffect: false, curvedLines: false,
-  lineEndStyle: 'boxed', // New parameter: 'boxed', 'tapered', or 'rounded'
-  scaleGap: 10, scaleSensitivity: 1, audioLineWidth: false
-};
-let baseScale = defaultParams.scale;
-let baseLineWidth = defaultParams.lineWidth;
-
-// -------------------------------
 // Canvas Setup
-// -------------------------------
-const positionBuffer = gl.createBuffer();
-const distanceBuffer = gl.createBuffer();
-const widthBuffer = gl.createBuffer();
-const normalBuffer = gl.createBuffer();
-const buffers = {
-  position: positionBuffer,
-  distance: distanceBuffer,
-  width: widthBuffer,
-  normal: normalBuffer
-};
-
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   gl.viewport(0, 0, canvas.width, canvas.height);
-  drawSpiral();
+  drawComposition();
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// -------------------------------
-// Removed Legacy Spiral Drawing Functions
-// (See drawing.js for the new WebGL engine)
-// -------------------------------
+function drawComposition(forceUpdate = false) {
+  // Clear the screen once per frame based on active layer's bg color
+  const activeLayer = getActiveLayer();
+  if (activeLayer) {
+    const bg = activeLayer.params.backgroundColor || '#111111';
+    gl.clearColor(
+      parseInt(bg.slice(1, 3), 16) / 255,
+      parseInt(bg.slice(3, 5), 16) / 255,
+      parseInt(bg.slice(5, 7), 16) / 255,
+      1.0
+    );
+  } else {
+    gl.clearColor(0.1, 0.1, 0.1, 1.0);
+  }
+  gl.clear(gl.COLOR_BUFFER_BIT);
 
-function updateParams() {
-  currentParams = {
-    scale: parseFloat(document.getElementById('scale').value),
-    nodes: parseInt(document.getElementById('nodes').value),
-    angleStep: parseFloat(document.getElementById('angleStep').value),
-    rotation: parseFloat(document.getElementById('rotation').value),
-    layers: parseInt(document.getElementById('layers').value),
-    layerRatio: parseFloat(document.getElementById('layerRatio').value),
-    verticalMirror: document.getElementById('verticalMirror').checked,
-    horizontalMirror: document.getElementById('horizontalMirror').checked,
-    strokeColor: document.getElementById('strokeColor').value,
-    lineWidth: parseFloat(document.getElementById('lineWidth').value),
-    opacity: parseFloat(document.getElementById('opacity').value),
-    spiralType: document.getElementById('spiralType').value,
-    backgroundColor: document.getElementById('backgroundColor').value,
-    verticalColor: document.getElementById('verticalColor').value,
-    horizontalColor: document.getElementById('horizontalColor').value,
-    bothColor: document.getElementById('bothColor').value,
-    gradientStroke: document.getElementById('gradientStroke').checked,
-    dashEffect: document.getElementById('dashEffect').checked,
-    curvedLines: document.getElementById('curvedLines').checked,
-    lineEndStyle: document.getElementById('lineEndStyle').value,
-    autoRotate: document.getElementById('autoRotate').checked,
-    audioReactive: document.getElementById('audioReactive').checked,
-    audioRotate: document.getElementById('audioRotate').checked,
-    audioScale: document.getElementById('audioScale').checked,
-    audioLineWidth: document.getElementById('audioLineWidth')?.checked || false,
-    audioOpacity: document.getElementById('audioOpacity').checked,
-    scaleGap: parseFloat(document.getElementById('scaleGap')?.value || defaultParams.scaleGap),
-    scaleSensitivity: parseFloat(document.getElementById('scaleSensitivity')?.value || defaultParams.scaleSensitivity)
-  };
+  gl.useProgram(program);
+  gl.uniform2f(locations.resolution, canvas.width, canvas.height);
+  gl.uniform2f(locations.center, canvas.width / 2, canvas.height / 2);
+
+  // Note: For now, audio rotation and audio scale are global options
+  // that we pass down to each visualizer.
+  let globalRotationOffset = 0;
+  let globalScaleMultiplier = 1;
+  const audioOptions = { forceUpdate, program }; // <--- passing program here
+
+  // Example placeholders (Will be animated in audio.js/animateRotation):
+  // if (masterAudioParams.autoRotate) { ... calculate globalRotationOffset }
+
+  appState.layers.forEach(layer => {
+    if (layer.visualizer && layer.visualizer.render) {
+      layer.visualizer.render(gl, layer.params, locations, audioOptions);
+    }
+  });
 }
 
-function drawSpiral() {
-  updateParams();
-  drawSpiralOnContext(gl, canvas.width, canvas.height, currentParams, locations, buffers);
-}
-
-// -------------------------------
-// Auto-Rotate Animation
-// -------------------------------
+// Global Animation loop replacing animateRotation
 function animateRotation() {
-  if (currentParams.autoRotate) {
-    let rotationInput = document.getElementById('rotation');
-    let currentRotation = parseFloat(rotationInput.value);
-    currentRotation = (currentRotation + 1) % 360;
-    rotationInput.value = currentRotation;
-    document.getElementById('rotationValue').textContent = Math.round(currentRotation);
-    drawSpiral();
+  if (masterAudioParams.autoRotate) {
+    // Update the rotation for all layers to keep the visualizer dynamic
+    appState.layers.forEach(layer => {
+      if (layer.params.rotation !== undefined) {
+        const speed = layer.params.autoRotateSpeed !== undefined ? layer.params.autoRotateSpeed : 1.0;
+        layer.params.rotation = (layer.params.rotation + speed) % 360;
+        if (layer.params.rotation < 0) layer.params.rotation += 360; // Keep it positive for consistency
+      }
+    });
+    
+    // Update the UI feedback for the active layer
+    const activeLayer = getActiveLayer();
+    if (activeLayer && activeLayer.params.rotation !== undefined) {
+      const rotationInput = document.getElementById('rotation');
+      if (rotationInput) rotationInput.value = activeLayer.params.rotation;
+      const rotationValue = document.getElementById('rotationValue');
+      if (rotationValue) rotationValue.textContent = Math.round(activeLayer.params.rotation);
+    }
+    
+    drawComposition();
     requestAnimationFrame(animateRotation);
   }
 }
 
-// -------------------------------
-// Download Function
-// -------------------------------
-function downloadCanvas() { // This function is complex due to WebGL context recreation
+function downloadCanvas() { 
   const downloadCanvas = document.createElement('canvas');
   downloadCanvas.width = 2160;
   downloadCanvas.height = 2160;
   const downloadGl = downloadCanvas.getContext('webgl', { preserveDrawingBuffer: true });
   if (!downloadGl) throw new Error('WebGL not supported for download');
 
-  // Re-create shaders and program for the download context
-  const { program: downloadProgram } = setupWebGL(downloadGl);
-  /*
-  const downloadProgram = downloadGl.createProgram();
-  downloadGl.attachShader(downloadProgram, downloadVertexShader);
-  downloadGl.attachShader(downloadProgram, downloadFragmentShader);
-  downloadGl.linkProgram(downloadProgram);
-  if (!downloadGl.getProgramParameter(downloadProgram, downloadGl.LINK_STATUS)) {
-    console.error(downloadGl.getProgramInfoLog(downloadProgram));
-  }
-  */
+  // We actually need unique locations for the download context, so WebGL Setup needs re-running
+  const { program: downloadProgram, locations: downloadLocations } = setupWebGL(downloadGl);
 
-  // Redraw the entire scene on the new, high-resolution canvas
-  const newBuffers = { position: downloadGl.createBuffer(), distance: downloadGl.createBuffer(), width: downloadGl.createBuffer(), normal: downloadGl.createBuffer() };
-  drawSpiralOnContext(downloadGl, downloadCanvas.width, downloadCanvas.height, currentParams, downloadLocations, newBuffers, true);
+  // Clear background
+  const activeLayer = getActiveLayer();
+  if (activeLayer) {
+    const bg = activeLayer.params.backgroundColor || '#111111';
+    downloadGl.clearColor(
+      parseInt(bg.slice(1, 3), 16) / 255,
+      parseInt(bg.slice(3, 5), 16) / 255,
+      parseInt(bg.slice(5, 7), 16) / 255,
+      1.0
+    );
+  } else {
+    downloadGl.clearColor(0.1, 0.1, 0.1, 1.0);
+  }
+  downloadGl.clear(downloadGl.COLOR_BUFFER_BIT);
+
+  downloadGl.useProgram(downloadProgram);
+  downloadGl.uniform2f(downloadLocations.resolution, downloadCanvas.width, downloadCanvas.height);
+  downloadGl.uniform2f(downloadLocations.center, downloadCanvas.width / 2, downloadCanvas.height / 2);
+
+  // Iterate over all layers and pass downloadLocations and forceUpdate
+  appState.layers.forEach(layer => {
+    if (layer.visualizer && layer.visualizer.render) {
+      layer.visualizer.render(downloadGl, layer.params, downloadLocations, { forceUpdate: true, program: downloadProgram });
+    }
+  });
 
   downloadGl.finish(); // Ensure drawing is complete
 
@@ -132,20 +120,5 @@ function downloadCanvas() { // This function is complex due to WebGL context rec
   link.click();
 }
 
-// -------------------------------
-// Ratio Buttons
-// -------------------------------
-function setRatio(ratio) {
-  const ratioInput = document.getElementById('layerRatio');
-  ratioInput.value = ratio;
-  document.getElementById('layerRatioValue').textContent = ratio.toFixed(1);
-  saveState();
-  drawSpiral();
-}
-
-// -------------------------------
-// Fullscreen Handling
-// -------------------------------
-
-// Initial draw
-drawSpiral();
+// Initial initialization
+reset(); // This sets up the first layer and triggers the first drawComposition()

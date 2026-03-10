@@ -48,60 +48,51 @@ function lerp(start, end, t) {
 }
 
 function animateAudioReactive() {
-  if (currentParams.audioReactive) {
+  if (masterAudioParams.audioReactive) {
     const amplitude = getAudioAmplitude();
-    const scaleInput = document.getElementById('scale');
-    const rotationInput = document.getElementById('rotation');
-    const opacityInput = document.getElementById('opacity');
 
-    if (currentParams.audioRotate) {
-      let baseRotation = parseFloat(rotationInput.value) || 0;
-      const fluctuation = amplitude * 180;
-      rotationInput.value = (baseRotation + fluctuation) % 360;
-      document.getElementById('rotationValue').textContent = Math.round(rotationInput.value);
-    }
-
-    if (currentParams.audioLineWidth) {
-      const lineWidthInput = document.getElementById('lineWidth');
-      const currentWidth = parseFloat(lineWidthInput.value);
-      let targetWidth;
-      if (amplitude > 0.05) {
-        // Map amplitude to a width increase (e.g. up to +8px)
-        const fluctuation = amplitude * 5 * currentParams.scaleSensitivity;
-        targetWidth = baseLineWidth + fluctuation;
-        // Keep within slider bounds (1 to 10)
-        targetWidth = Math.min(Math.max(targetWidth, 1), 10);
-      } else {
-        targetWidth = baseLineWidth;
+    appState.layers.forEach(layer => {
+      if (masterAudioParams.audioRotate && layer.params.rotation !== undefined) {
+        let baseRotation = layer.params.rotation || 0;
+        const fluctuation = amplitude * 180;
+        layer.params.rotation = (baseRotation + fluctuation) % 360;
       }
-      const newWidth = lerp(currentWidth, targetWidth, 0.2);
-      lineWidthInput.value = newWidth;
-      document.getElementById('lineWidthValue').textContent = newWidth.toFixed(0);
-    }
 
-    if (currentParams.audioScale) {
-      const currentScale = parseFloat(scaleInput.value);
-      let targetScale;
-      if (amplitude > 0.05) {
-        const adjustedAmplitude = amplitude * currentParams.scaleSensitivity;
-        targetScale = baseScale + (adjustedAmplitude * currentParams.scaleGap);
-        targetScale = Math.min(Math.max(targetScale, baseScale), baseScale + currentParams.scaleGap);
-      } else {
-        targetScale = baseScale;
+      if (masterAudioParams.audioLineWidth && layer.params.lineWidth !== undefined) {
+        const currentWidth = layer.params.lineWidth;
+        let targetWidth;
+        if (amplitude > 0.05) {
+          const fluctuation = amplitude * 5 * masterAudioParams.scaleSensitivity;
+          targetWidth = window.baseLineWidth + fluctuation;
+          targetWidth = Math.min(Math.max(targetWidth, 1), 10);
+        } else {
+          targetWidth = window.baseLineWidth;
+        }
+        layer.params.lineWidth = lerp(currentWidth, targetWidth, 0.2);
       }
-      const newScale = lerp(currentScale, targetScale, 0.1);
-      scaleInput.value = newScale;
-      document.getElementById('scaleValue').textContent = newScale.toFixed(1);
-    }
 
-    if (currentParams.audioOpacity) {
-      const baseOpacity = parseFloat(opacityInput.value) || 1;
-      const fluctuation = amplitude * 0.5;
-      opacityInput.value = Math.min(Math.max(baseOpacity - fluctuation + 0.5, 0), 1);
-      document.getElementById('opacityValue').textContent = opacityInput.value;
-    }
+      if (masterAudioParams.audioScale && layer.params.scale !== undefined) {
+        const currentScale = layer.params.scale;
+        let targetScale;
+        if (amplitude > 0.05) {
+          const adjustedAmplitude = amplitude * masterAudioParams.scaleSensitivity;
+          targetScale = window.baseScale + (adjustedAmplitude * masterAudioParams.scaleGap);
+          targetScale = Math.min(Math.max(targetScale, window.baseScale), window.baseScale + masterAudioParams.scaleGap);
+        } else {
+          targetScale = window.baseScale;
+        }
+        layer.params.scale = lerp(currentScale, targetScale, 0.1);
+      }
 
-    drawSpiral();
+      if (masterAudioParams.audioOpacity && layer.params.opacity !== undefined) {
+        const baseOpacity = layer.params.opacity || 1;
+        const fluctuation = amplitude * 0.5;
+        layer.params.opacity = Math.min(Math.max(baseOpacity - fluctuation + 0.5, 0), 1);
+      }
+    });
+
+    updateUIFromState();
+    drawComposition(true);
     requestAnimationFrame(animateAudioReactive);
   }
 }

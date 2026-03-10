@@ -66,7 +66,7 @@ To run this project locally:
 - `styles.css`: CSS for responsive layout and styling.
 - `script.js`: The main script that initializes the application and coordinates the other modules.
 - `webgl-setup.js`: Handles low-level WebGL shader and program setup.
-- `drawing.js`: Contains the core logic for calculating and rendering the spiral visuals.
+- `visualizers/`: Contains the individual visualizer plugins like `spiral.js` and `fractal.js`.
 - `audio.js`: Manages microphone input and audio-reactive animations.
 - `ui.js`: Controls all user interface interactions and event listeners.
 - `state.js`: Manages application state, including undo/reset functionality.

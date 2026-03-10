@@ -17,7 +17,7 @@ The immediate goals are to refine the existing features, improve performance, an
 
 - **[ ] UI/UX Enhancements:**
   - [x] Add a "Start/Stop Audio" button to give users more explicit control over microphone access.
-  - [ ] Improve layout and responsiveness of the controls panel for smaller screens.
+  - [x] Improve layout and responsiveness of the controls panel for smaller screens.
   - [x] Integrate advanced mobile touch controls (pinch-to-zoom, drag-to-rotate) from the `/2` prototype.
   - [x] Add tooltips to explain what each control does.
   - [x] Implement an idle "Screensaver Mode" that hides UI controls after inactivity to prevent screen burn-in and enhance the overlay experience.
@@ -42,15 +42,18 @@ This version will focus on integrating more advanced audio analysis techniques, 
   - [ ] Implement FFT (Fast Fourier Transform) to analyze audio frequency data, not just amplitude.
   - [ ] Allow different visual parameters to react to different frequency ranges (e.g., bass frequencies affect scale, treble affects color or rotation speed).
 
-- **[ ] Multi-Layer Composition System:**
-  - [ ] Implement a layer manager allowing users to stack multiple visual effects (e.g., Spiral + Spectrum Analyzer).
-  - [ ] Add controls for reordering layers and adjusting individual layer opacity/blending modes.
-  - [ ] Develop new effect types to populate layers:
-    - [ ] Reactive Fractals (Full Fractal Visualizer with its own dedicated settings).
-    - [ ] Spectrum Analyzer (Frequency Bars/Waveforms).
+- **[ ] Multi-Layer Composition Architecture (The Framework):**
+  - [ ] Refactor state and rendering engine to support an array of generic visual layers.
+  - [ ] Implement a layer manager allowing users to add, stack, reorder, and blend multiple visual effects.
+  - [ ] Define a standard plugin interface for new visualizers (e.g., `init()`, `update()`, `draw()`, `ui()`).
+  - [ ] Refactor the existing "Original Spiral" to plug into this new system as the first visualizer type.
 
-- **[ ] New Visual Modes:**
-  - [ ] Introduce new visualizer types beyond spirals (e.g., standalone Fractal Visualizer, frequency bars, circular waveforms, particle systems, tunnel effects) leveraging the WebGL engine.
+- **[ ] New Visual Modes (Plugins):**
+  - [x] Build the "Fractal Visualizer" plugin (Mandelbrot/Julia sets) with its own dedicated UI settings.
+  - [ ] Build a "Spectrum Analyzer" plugin (Frequency Bars/Waveforms).
+  - [ ] Build a "VU Meter" visualizer plugin.
+  - [ ] Build a "Wave Oscillator" visualizer plugin.
+  - [ ] Introduce other visualizer types (circular waveforms, particle systems, tunnel effects) leveraging the WebGL engine.
   - [ ] Allow color to be reactive to audio frequency or amplitude.
 
 - **[ ] Input Sources:**

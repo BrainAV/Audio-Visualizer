@@ -1,45 +1,40 @@
 ---
-description: How to add a new visualizer mode or layer (e.g., Fractal Visualizer)
+description: How to add a new visualizer mode or layer (e.g., Fractal Visualizer, VU Meter)
 ---
 
 # Creating a New Visualizer
 
-This workflow outlines the steps required to add a new standalone visualizer mode (like a Fractal Visualizer) to the Audio-Visualizer project. The project uses WebGL for high-performance rendering.
-
-## Preliminary Steps
-1. Review `.gemini/PROJECT_CONTEXT.md` and `.gemini/CODING_STANDARDS.md` to ensure your plan aligns with the project architecture.
-2. Review the `ROADMAP.md` to ensure the new visualizer is a planned feature.
+This workflow outlines the steps required to add a new standalone visualizer mode (like a VU Meter or Wave Oscillator) to the Audio-Visualizer project. The project uses a multi-layer WebGL rendering architecture.
 
 ## Implementation Steps
 
-### 1. State Management (`state.js`)
-- Add a new visualizer type to the application state.
-- Define any default properties specific to this new visualizer (e.g., `fractalIterations`, `fractalZoom`).
+### 1. Visualizer Plugin Definition (e.g., `visualizers/vumeter.js`)
+- Create a new file for the visualizer under `visualizers/`.
+- Export an object (e.g., `VuMeterVisualizer`) with the following structure:
+  - `name`: String name of the visualizer.
+  - `getDefaultParams()`: Returns an object with the default state and UI parameters for this layer (e.g., `scale`, `color`, `opacity`).
+  - `render(gl, params, locations, options)`: The main WebGL draw function.
+- Register the visualizer onto the global object: `window.Visualizers = window.Visualizers || {}; window.Visualizers.VuMeter = VuMeterVisualizer;`
 
-### 2. User Interface (`ui.js` and `index.html`)
-- Update `index.html` to include new UI controls for the visualizer's specific settings.
-- Update `ui.js` to handle switching between visualizer types. You'll need logic to show/hide specific control panels depending on the active visualizer (e.g., hide spiral-specific controls when in Fractal mode).
-- Attach event listeners to the new UI controls to update `state.js` and trigger redraws.
+### 2. State Management (`state.js`)
+- Update `addLayer(type)` in `state.js` to instantiate the new visualizer if `type === 'VU Meter'`. Look for the `appState.layers.push(...)` pattern.
 
-### 3. WebGL Engine Setup (`webgl-setup.js`)
-- If the new visualizer requires a fundamentally different rendering approach, you may need to introduce new vertex or fragment shaders.
-- Alternatively, you can modify the existing shaders to support multiple modes via uniforms (e.g., passing a `uMode` uniform to switch rendering logic inside the GLSL code).
-- Ensure any new uniforms or attributes are correctly linked in `webgl-setup.js`.
+### 3. WebGL Engine Setup (`webgl-setup.js` & specific render function)
+- The main `script.js` loop passes an active WebGL context (`gl`) to your `render` function.
+- If your visualizer requires custom shaders (like `fractal.js`), define, compile, and link them locally inside your visualizer's initialization or `render` block. Switch to your `_program` using `gl.useProgram(this._program)`.
+- Enable blending `gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);` so it composites properly over previous layers.
 
-### 4. Rendering Logic (`drawing.js`)
-- Create a dedicated function for the new visualizer (e.g., `drawFractal(gl, programInfo, state)`).
-- Update the main `draw()` or render loop function to route the execution to the correct drawing function based on the active state.
-- Ensure efficient buffer updates. Do not recreate buffers every frame; update existing buffers with new data utilizing `gl.bufferSubData` or similar if the vertex count is dynamic but bounded.
+### 4. User Interface (`index.html` & `ui.js`)
+- **index.html**: Add an "Add VU Meter" button to the `layerManager` controls. Create a new `div` block for your specific controls (e.g., `<div id="vumeterControlsContainer" style="display: none;">...</div>`). Add sliders `input type="range"` and map them to your layer parameters.
+- **ui.js**:
+  - Attach an event listener to your new "Add" button to call `addLayer('VU Meter')`.
+  - Update `updateUIFromState()` to detect if `activeLayer.type === 'VU Meter'` and toggle `display: block` for your container (while hiding others).
+  - The generic `handleInput` function in `ui.js` automatically maps input `id`s to the `activeLayer.params[id]`, so as long as your HTML element IDs match your `getDefaultParams` keys, they will stay in sync automatically!
 
 ### 5. Audio Reactivity (`audio.js`)
-- Map audio analysis data to the new visualizer's parameters (e.g., make fractal zoom pulsate with the beat).
-- Ensure the interpolation logic (`lerp`) safely handles the new properties.
+- Only variables shared across layers should be in `masterAudioParams`. Standard audio reactivity happens in `animateAudioReactive()`. You can either bake audio reaction into your WebGL shader natively using an audio texture, or modify properties frame-by-frame inside `animateAudioReactive` if toggles are active.
 
-### 6. Presets (`presets.js`)
-- Create at least one default preset for the new visualizer so users can easily test it.
+### 6. Presets (`presets.js` & `index.html`)
+- Include the new script `<script src="visualizers/vumeter.js"></script>` in `index.html`.
+- Add a new aesthetic preset showcasing the visualizer to `presets.js`!
 
-## Verification
-- Test switching back and forth between the new visualizer and the existing Spiral visualizer to ensure state does not leak.
-- Verify performance holds at 60fps.
-- Verify that resize events are handled correctly by the new visualizer.
-- Verify audio reactivity functions as expected.

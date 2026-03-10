@@ -1,6 +1,6 @@
 function initUI() {
   // -------------------------------
-  // Presets, Undo, Reset
+  // Presets
   // -------------------------------
   function populatePresetSelector() {
     const presetSelector = document.getElementById('presetSelector');
@@ -14,61 +14,85 @@ function initUI() {
 
   document.addEventListener('DOMContentLoaded', () => {
     populatePresetSelector();
+    updateLayerListUI();
   });
 
   document.getElementById('presetSelector').addEventListener('change', function() {
     const preset = presets[this.value];
     if (preset) {
+      const activeLayer = getActiveLayer();
+      if(!activeLayer) return;
       Object.keys(preset).forEach(key => {
-        const element = document.getElementById(key);
-        if (element.type === 'checkbox') element.checked = preset[key];
-        else element.value = preset[key];
-        const valueSpan = document.getElementById(key + 'Value');
-        if (valueSpan) valueSpan.textContent = preset[key];
-        if (key === 'scale') {
-          baseScale = parseFloat(preset[key]);
-          document.getElementById('scale').value = baseScale;
-          document.getElementById('scaleValue').textContent = baseScale.toFixed(1);
-        }
-        if (key === 'lineWidth') {
-          baseLineWidth = parseFloat(preset[key]);
-        }
+        activeLayer.params[key] = preset[key];
       });
       saveState();
-      drawSpiral();
+      updateUIFromState();
+      drawComposition();
     }
   });
 
   // -------------------------------
   // Input Handlers
   // -------------------------------
-  document.querySelectorAll('input, select').forEach(input => {
-    input.addEventListener('input', function() {
+  const handleInput = function() {
+    if (this.id === 'layerList') return; // Handled separately
+    
+    const activeLayer = getActiveLayer();
+      if (!activeLayer) return;
+
       saveState();
-      if (this.type === 'range' || this.type === 'color' || this.type === 'checkbox' || this.tagName.toLowerCase() === 'select') {
-        const valueSpan = document.getElementById(this.id + 'Value');
-        if (valueSpan) {
-          valueSpan.textContent = (this.type === 'range' && this.step.includes('.')) ? parseFloat(this.value).toFixed(1) : this.value;
+
+      if (this.type === 'checkbox') {
+        if (masterAudioParams.hasOwnProperty(this.id) || this.id === 'autoRotate') {
+            masterAudioParams[this.id] = this.checked;
+        } else {
+            activeLayer.params[this.id] = this.checked;
+        }
+      } else {
+        const val = this.type === 'number' || this.type === 'range' ? parseFloat(this.value) : this.value;
+        if (masterAudioParams.hasOwnProperty(this.id)) {
+            masterAudioParams[this.id] = val;
+        } else {
+            activeLayer.params[this.id] = val;
         }
       }
-      if (this.id === 'scale' && !currentParams.audioReactive) {
-        baseScale = parseFloat(this.value);
+      
+      if (this.type === 'range' || this.type === 'color' || this.tagName.toLowerCase() === 'select') {
+        const valueSpan = document.getElementById(this.id + 'Value');
+        if (valueSpan) {
+            valueSpan.textContent = (this.type === 'range' && this.step.includes('.')) ? parseFloat(this.value).toFixed(1) : this.value;
+        }
       }
-      if (this.id === 'lineWidth' && !currentParams.audioReactive) {
-        baseLineWidth = parseFloat(this.value);
+
+      if (this.id === 'scale' && !masterAudioParams.audioReactive) {
+        window.baseScale = parseFloat(this.value);
       }
-      drawSpiral();
-    });
+      if (this.id === 'lineWidth' && !masterAudioParams.audioReactive) {
+        window.baseLineWidth = parseFloat(this.value);
+      }
+      
+      // Auto-Rotate handling
+      if (this.id === 'autoRotate') {
+        if (this.checked) animateRotation();
+      }
+
+      drawComposition();
+  };
+
+  document.querySelectorAll('input, select').forEach(input => {
+    input.addEventListener('input', handleInput);
+    input.addEventListener('change', handleInput);
   });
 
-  // -------------------------------
-  // Auto-Rotate Animation
-  // -------------------------------
-  document.getElementById('autoRotate').addEventListener('change', function() {
-    currentParams.autoRotate = this.checked;
-    if (this.checked) animateRotation();
-    else drawSpiral();
+  // Layer Management UI
+  document.getElementById('addSpiralLayerBtn').addEventListener('click', () => addLayer('Original Spiral'));
+  document.getElementById('addFractalLayerBtn').addEventListener('click', () => addLayer('Fractal'));
+  document.getElementById('removeLayerBtn').addEventListener('click', () => removeActiveLayer());
+  document.getElementById('layerList').addEventListener('change', (e) => {
+    appState.activeLayerIndex = parseInt(e.target.value);
+    updateUIFromState();
   });
+
 
   // -------------------------------
   // Audio Reactive Setup
@@ -76,25 +100,28 @@ function initUI() {
   const audioToggleButton = document.getElementById('audioToggleButton');
 
   document.getElementById('audioReactive').addEventListener('change', function() {
-    currentParams.audioReactive = this.checked;
+    masterAudioParams.audioReactive = this.checked;
     document.getElementById('audioOptions').style.display = this.checked ? 'block' : 'none';
     audioToggleButton.style.display = this.checked ? 'inline-block' : 'none';
 
     if (this.checked && audioContext) {
       animateAudioReactive();
     } else {
-      drawSpiral();
+      drawComposition();
     }
   });
 
   audioToggleButton.addEventListener('click', function() {
     if (!audioContext) {
       // Start Audio
-      baseScale = parseFloat(document.getElementById('scale').value);
+      const activeLayer = getActiveLayer();
+      if(activeLayer) {
+        window.baseScale = activeLayer.params.scale;
+      }
       initAudio().then(() => {
         if (audioContext) {
           this.textContent = 'Stop Audio';
-          if (document.getElementById('audioReactive').checked) {
+          if (masterAudioParams.audioReactive) {
             animateAudioReactive();
           }
         }
@@ -106,61 +133,6 @@ function initUI() {
     }
   });
 
-  document.getElementById('audioScale').addEventListener('change', function() {
-    currentParams.audioScale = this.checked;
-    if (!this.checked) {
-      document.getElementById('scale').value = baseScale;
-      document.getElementById('scaleValue').textContent = baseScale.toFixed(1);
-    }
-    drawSpiral();
-  });
-
-  const audioLineWidthCheckbox = document.getElementById('audioLineWidth');
-  if (audioLineWidthCheckbox) {
-    audioLineWidthCheckbox.addEventListener('change', function() {
-      currentParams.audioLineWidth = this.checked;
-      if (!this.checked) {
-        document.getElementById('lineWidth').value = baseLineWidth;
-        document.getElementById('lineWidthValue').textContent = baseLineWidth.toFixed(0);
-      }
-      drawSpiral();
-    });
-  }
-
-  document.getElementById('audioRotate').addEventListener('change', function() {
-    currentParams.audioRotate = this.checked;
-    drawSpiral();
-  });
-
-  document.getElementById('audioOpacity').addEventListener('change', function() {
-    currentParams.audioOpacity = this.checked;
-    drawSpiral();
-  });
-
-  document.getElementById('scaleGap')?.addEventListener('input', function() {
-    currentParams.scaleGap = parseFloat(this.value);
-    document.getElementById('scaleGapValue').textContent = this.value;
-    drawSpiral();
-  });
-
-  document.getElementById('scaleSensitivity')?.addEventListener('input', function() {
-    currentParams.scaleSensitivity = parseFloat(this.value);
-    document.getElementById('scaleSensitivityValue').textContent = this.value;
-    drawSpiral();
-  });
-
-  // Allow manual adjustments during audio reactivity
-  ['scale', 'lineWidth', 'opacity'].forEach(id => {
-    const input = document.getElementById(id);
-    input.addEventListener('input', function() {
-      if (currentParams.audioReactive) {
-        if (id === 'scale' && !currentParams.audioScale) baseScale = parseFloat(this.value);
-        if (id === 'lineWidth' && !currentParams.audioLineWidth) baseLineWidth = parseFloat(this.value);
-      }
-      document.getElementById(id + 'Value').textContent = id === 'opacity' ? this.value : parseFloat(this.value).toFixed(1);
-      drawSpiral();
-    });
-  });
 
   // -------------------------------
   // Controls Toggle & Info Modal
@@ -235,7 +207,8 @@ function initUI() {
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
-      initialScale = parseFloat(document.getElementById('scale').value);
+      const activeLayer = getActiveLayer();
+      initialScale = activeLayer ? activeLayer.params.scale : 30;
     }
   }
 
@@ -246,25 +219,28 @@ function initUI() {
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
-      const scaleInput = document.getElementById('scale');
+      
       const newScale = initialScale * (currentDistance / initialPinchDistance);
-      scaleInput.value = Math.min(Math.max(newScale, 1), 100);
-      if (!currentParams.audioReactive || !currentParams.audioScale) {
-        baseScale = parseFloat(scaleInput.value);
+      const activeLayer = getActiveLayer();
+      if (activeLayer) {
+        activeLayer.params.scale = Math.min(Math.max(newScale, 1), 100);
+        if (!masterAudioParams.audioReactive || !masterAudioParams.audioScale) {
+          window.baseScale = activeLayer.params.scale;
+        }
+        updateUIFromState();
+        saveState();
+        drawComposition();
       }
-      document.getElementById('scaleValue').textContent = parseFloat(scaleInput.value).toFixed(1);
-      saveState();
-      drawSpiral();
     } else if (e.touches.length === 1) {
-      // This logic is from the /2/ prototype for drag-to-rotate
-      const rotationInput = document.getElementById('rotation');
-      const currentRotation = parseFloat(rotationInput.value) || 0;
-      const deltaX = e.touches[0].movementX || 0; // Use movementX for change in position
-      const newRotation = (currentRotation + deltaX * 0.5 + 360) % 360; // Add 360 to handle negative results
-      rotationInput.value = newRotation;
-      document.getElementById('rotationValue').textContent = Math.round(newRotation);
-      saveState();
-      drawSpiral();
+      const deltaX = e.touches[0].movementX || 0;
+      const activeLayer = getActiveLayer();
+      if(activeLayer) {
+          const currentRotation = activeLayer.params.rotation || 0;
+          activeLayer.params.rotation = (currentRotation + deltaX * 0.5 + 360) % 360;
+          updateUIFromState();
+          saveState();
+          drawComposition();
+      }
     }
   }
 
@@ -317,13 +293,8 @@ function initUI() {
   const uiElements = [controlsOverlay, toggleButton, infoButton];
 
   function resetIdleTimer() {
-    // Remove idle class
     uiElements.forEach(el => el.classList.remove('idle'));
-    
-    // Clear and restart timer
     clearTimeout(idleTimer);
-    
-    // Only set timer if controls are actually manually shown
     if (controlsOverlay.style.display !== 'none') {
       idleTimer = setTimeout(() => {
         uiElements.forEach(el => el.classList.add('idle'));
@@ -331,13 +302,21 @@ function initUI() {
     }
   }
 
-  // Monitor user activity globally
   ['mousemove', 'mousedown', 'touchstart', 'keydown'].forEach(evt => {
     window.addEventListener(evt, resetIdleTimer, true);
   });
   
-  // Initial start
   resetIdleTimer();
+}
+
+function setRatio(ratio) {
+  const activeLayer = getActiveLayer();
+  if(activeLayer && activeLayer.params.layerRatio !== undefined) {
+      activeLayer.params.layerRatio = ratio;
+      updateUIFromState();
+      saveState();
+      drawComposition();
+  }
 }
 
 initUI();
