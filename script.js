@@ -77,47 +77,29 @@ function animateRotation() {
 }
 
 function downloadCanvas() { 
-  const downloadCanvas = document.createElement('canvas');
-  downloadCanvas.width = 2160;
-  downloadCanvas.height = 2160;
-  const downloadGl = downloadCanvas.getContext('webgl', { preserveDrawingBuffer: true });
-  if (!downloadGl) throw new Error('WebGL not supported for download');
+  // Store original dimensions
+  const oldWidth = canvas.width;
+  const oldHeight = canvas.height;
 
-  // We actually need unique locations for the download context, so WebGL Setup needs re-running
-  const { program: downloadProgram, locations: downloadLocations } = setupWebGL(downloadGl);
+  // Temporarily resize main canvas for high-res export
+  canvas.width = 2160;
+  canvas.height = 2160;
+  gl.viewport(0, 0, 2160, 2160);
 
-  // Clear background
-  const activeLayer = getActiveLayer();
-  if (activeLayer) {
-    const bg = activeLayer.params.backgroundColor || '#111111';
-    downloadGl.clearColor(
-      parseInt(bg.slice(1, 3), 16) / 255,
-      parseInt(bg.slice(3, 5), 16) / 255,
-      parseInt(bg.slice(5, 7), 16) / 255,
-      1.0
-    );
-  } else {
-    downloadGl.clearColor(0.1, 0.1, 0.1, 1.0);
-  }
-  downloadGl.clear(downloadGl.COLOR_BUFFER_BIT);
+  // Force a synchronous redraw on the main context
+  drawComposition(true);
 
-  downloadGl.useProgram(downloadProgram);
-  downloadGl.uniform2f(downloadLocations.resolution, downloadCanvas.width, downloadCanvas.height);
-  downloadGl.uniform2f(downloadLocations.center, downloadCanvas.width / 2, downloadCanvas.height / 2);
-
-  // Iterate over all layers and pass downloadLocations and forceUpdate
-  appState.layers.forEach(layer => {
-    if (layer.visualizer && layer.visualizer.render) {
-      layer.visualizer.render(downloadGl, layer.params, downloadLocations, { forceUpdate: true, program: downloadProgram });
-    }
-  });
-
-  downloadGl.finish(); // Ensure drawing is complete
-
+  // Extract the image safely since we have preserveDrawingBuffer: true and haven't yielded
   const link = document.createElement('a');
   link.download = 'audio-visualizer.png';
-  link.href = downloadCanvas.toDataURL('image/png');
+  link.href = canvas.toDataURL('image/png');
   link.click();
+
+  // Restore the original canvas size and redraw
+  canvas.width = oldWidth;
+  canvas.height = oldHeight;
+  gl.viewport(0, 0, oldWidth, oldHeight);
+  drawComposition(true);
 }
 
 // Initial initialization
